@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strategy Recorder, Adaptive</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
+</head>
+<body data-page="adaptive">
+<div class="page">
+  <div class="topbar">
+    <span class="brand"><span class="dot"></span>Strategy Recorder <small>MODE: ADAPTIVE, PROTOTYPE</small></span>
+    <div class="topbar-right">
+      <div class="mode-switch">
+        <span class="current" style="border:1px solid transparent;">Adaptive</span>
+      </div>
+      <div class="global-toggle">
+        Recorder entry point
+        <div class="segmented" id="placementToggle">
+          <button data-val="rail" class="active">Right-rail icon</button>
+          <button data-val="toolbar">Top toolbar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage" id="stage" data-placement="rail">
+
+    <!-- 1 -->
+    <section class="slide">
+      <span class="eyebrow">Strategy Recorder, Adaptive prototype</span>
+      <h1>Record once. We only interrupt if we get stuck.</h1>
+      <p class="lede">This is one of three standalone prototypes for the same idea: do the strategy once, the way you already do it, on the real Scalper screen, instead of filling condition forms. <strong>Adaptive</strong> stays silent through the whole recording and only speaks up for the one thing it genuinely could not infer. The other two timings, <strong>Batch</strong> and <strong>Inline</strong>, walk the same two tracks differently.</p>
+      <div class="pipeline">
+        <div class="pnode"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7-10-7-10-7z"></path></svg>Observe</div>
+        <span class="parrow">&rsaquo;</span>
+        <div class="pnode"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l1.6 4.6L18 8l-4.4 1.4L12 14l-1.6-4.6L6 8l4.4-1.4z"></path></svg>Decide</div>
+        <span class="parrow">&rsaquo;</span>
+        <div class="pnode"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg>Act</div>
+        <span class="parrow">&rsaquo;</span>
+        <div class="pnode" style="border-color:var(--accent-line)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="2.4" fill="currentColor"></circle></svg>Record</div>
+        <span class="parrow">&rsaquo;</span>
+        <div class="pnode"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 9h8M8 13h5"></path><rect x="4" y="4" width="16" height="16" rx="3"></rect></svg>Ask</div>
+        <span class="parrow">&rsaquo;</span>
+        <div class="pnode"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4l-5 8 5 8M16 4l5 8-5 8"></path></svg>Compile</div>
+        <span class="parrow">&rsaquo;</span>
+        <div class="pnode"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 18a4 4 0 0 1-1-7.9A5 5 0 0 1 16 8a4.5 4.5 0 0 1 1 8.9"></path></svg>Deploy</div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="slide">
+      <span class="eyebrow">The idea</span>
+      <h1>Every manual trade is already Observe, Decide, Act.</h1>
+      <div class="cols">
+        <div class="col-card"><span class="tag">OBSERVE</span><p>Watching the chart, or watching the option chain. This is the part that already happens on screen, every time.</p></div>
+        <div class="col-card"><span class="tag">DECIDE</span><p>A fuzzy call in your head: "that crossover looks real" or "OI just built up too fast on that strike."</p></div>
+        <div class="col-card"><span class="tag">ACT</span><p>You click buy, sell a leg, set a stop, or exit. The only part that leaves a trace today.</p></div>
+      </div>
+      <p class="lede">Recording captures the triple as it happens, on the real screen, not a builder canvas. The only job left for the cross-question step is turning the fuzzy DECIDE into a number, something the system can already do with the indicators and scanners it has.</p>
+    </section>
+
+    <!-- 3 -->
+    <section class="slide">
+      <span class="eyebrow">Two tracks, one flow</span>
+      <h1>We will walk both paths end to end.</h1>
+      <div class="track-cards">
+        <div class="track-card a pickable" tabindex="0" role="button"><span class="lbl">TRACK A</span><h3>Chart-driven</h3><p>EMA 9 over EMA 21 on the NIFTY 5 minute spot chart. Entry and exit both read off the same crossover.</p></div>
+        <div class="track-card b pickable" tabindex="0" role="button"><span class="lbl">TRACK B</span><h3>Option chain-driven</h3><p>OI builds up fast on both sides of the same strike. Read as a pin into expiry, sell the straddle.</p></div>
+      </div>
+      <p class="caption">Same recorder, same two tracks. This page is the <strong>Adaptive</strong> timing, silent unless stuck.</p>
+    </section>
+
+    <!-- 4 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, idle</span>
+      <h1>Nothing is recording yet.</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <span class="frame-tag">nubra.io/dashboard/scalper, live capture</span>
+          <img src="assets/scalper-spot.png" alt="Nubra Scalper screen, default three pane layout, CE, Spot, PE, with order tickets below">
+          <div class="pl-rail">
+            <div class="record-icon-mock" style="left:74.5%;top:18.5%;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg></div>
+          </div>
+          <div class="pl-toolbar">
+            <div class="record-btn-mock" style="left:32%;top:9.3%;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>Record</div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">Default Scalper layout. Three panes, order tickets below. The one new element is the record control (toggle where it lives, above).</p>
+    </section>
+
+    <!-- 5 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, step 1</span>
+      <h1>User presses Record.</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <img src="assets/scalper-spot.png" alt="Nubra Scalper screen, cursor clicking the record control">
+          <div class="pl-rail">
+            <div class="record-icon-mock" style="left:74.5%;top:18.5%;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg></div>
+            <div class="fake-cursor" style="--x0:60%;--y0:92%;--x1:74.5%;--y1:18.5%;"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 3l14 6.5-6 2-2.5 6z" fill="#fff" stroke="#0a0b0d" stroke-width="1.2" stroke-linejoin="round"></path></svg></div>
+            <div class="click-ripple" style="--x1:74.5%;--y1:18.5%;"></div>
+          </div>
+          <div class="pl-toolbar">
+            <div class="record-btn-mock" style="left:32%;top:9.3%;"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"></circle><circle cx="12" cy="12" r="3" fill="currentColor"></circle></svg>Record</div>
+            <div class="fake-cursor" style="--x0:60%;--y0:92%;--x1:32%;--y1:9.3%;"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 3l14 6.5-6 2-2.5 6z" fill="#fff" stroke="#0a0b0d" stroke-width="1.2" stroke-linejoin="round"></path></svg></div>
+            <div class="click-ripple" style="--x1:32%;--y1:9.3%;"></div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">One click on the record control. Nothing else on screen changes yet.</p>
+    </section>
+
+    <!-- 6 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, step 1</span>
+      <h1>A small toolbox opens.</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <img src="assets/scalper-spot.png" alt="Nubra Scalper screen, a toolbox with draw and capture options open, recorder panel just opened">
+          <div class="toolbox" style="top:16%;left:40%;">
+            <div class="tool-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Draw</div>
+            <div class="tool-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>Capture</div>
+          </div>
+          <div class="rec-panel" style="right:0.7%;top:5%;width:24%;">
+            <div class="rec-head"><span class="live"><span class="rdot"></span>RECORDING</span><span class="count">Step 1</span></div>
+            <div class="rec-body">
+              <div class="step-node">
+                <div class="node-head">Step 1, in progress</div>
+                <div class="micro-log">
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></svg><span class="t">Recording started</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">Two options: mark up the chart, or capture the full screen as-is. Whatever happens next gets logged on the right, as it happens, not after.</p>
+    </section>
+
+    <!-- 7 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, step 1</span>
+      <h1>User circles what they're looking at.</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <img src="assets/scalper-spot.png" alt="Nubra Scalper screen, a circle being drawn around the EMA crossover">
+          <div class="toolbox" style="top:16%;left:40%;">
+            <div class="tool-btn active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Draw</div>
+            <div class="tool-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>Capture</div>
+          </div>
+          <svg class="draw-mark" style="left:32%;top:21%;width:16%;height:19%;" viewBox="0 0 100 100" preserveAspectRatio="none"><circle cx="50" cy="50" r="40"></circle></svg>
+          <div class="rec-panel" style="right:0.7%;top:5%;width:24%;">
+            <div class="rec-head"><span class="live"><span class="rdot"></span>RECORDING</span><span class="count">Step 1</span></div>
+            <div class="rec-body">
+              <div class="step-node">
+                <div class="node-head">Step 1, in progress</div>
+                <div class="micro-log">
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></svg><span class="t">Recording started</span></div>
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg><span class="t">Circled: EMA 9/21 crossover</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">This circle is the evidence: proof of what Aryan actually saw right before acting. It gets attached to this step, not thrown away.</p>
+    </section>
+
+    <!-- 8 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, step 1</span>
+      <h1>User captures the full screen.</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <img src="assets/scalper-spot.png" alt="Nubra Scalper screen, capture confirmed toast">
+          <div class="toolbox" style="top:16%;left:40%;">
+            <div class="tool-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>Draw</div>
+            <div class="tool-btn active"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>Capture</div>
+          </div>
+          <svg class="draw-mark" style="left:32%;top:21%;width:16%;height:19%;opacity:.55;" viewBox="0 0 100 100" preserveAspectRatio="none"><circle cx="50" cy="50" r="40" stroke-dashoffset="0"></circle></svg>
+          <div class="toast-confirm" style="top:16%;left:62%;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></svg>Captured</div>
+          <div class="rec-panel" style="right:0.7%;top:5%;width:24%;">
+            <div class="rec-head"><span class="live"><span class="rdot"></span>RECORDING</span><span class="count">Step 1</span></div>
+            <div class="rec-body">
+              <div class="step-node">
+                <div class="node-head">Step 1, in progress</div>
+                <div class="micro-log">
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></svg><span class="t">Recording started</span></div>
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg><span class="t">Circled: EMA 9/21 crossover</span></div>
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg><span class="t">Captured screenshot</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">The screenshot behind every step in this recorder is a real capture, exactly like this one, now attached as this step's evidence.</p>
+    </section>
+
+    <!-- 9 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, step 1</span>
+      <h1>User clicks into the contract they're acting on.</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <img src="assets/scalper-spot.png" alt="Nubra Scalper screen, cursor clicking the CE contract header, a strike picker opening">
+          <div class="fake-cursor" style="--x0:60%;--y0:92%;--x1:8%;--y1:13%;"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 3l14 6.5-6 2-2.5 6z" fill="#fff" stroke="#0a0b0d" stroke-width="1.2" stroke-linejoin="round"></path></svg></div>
+          <div class="click-ripple" style="--x1:8%;--y1:13%;"></div>
+          <div class="strike-picker" style="top:16%;left:3%;">
+            <div class="strike-row"><span>24200 CE</span><span>161.40</span></div>
+            <div class="strike-row"><span>24300 CE</span><span>126.50</span></div>
+            <div class="strike-row selected"><span>24400 CE</span><span>108.20</span></div>
+            <div class="strike-row"><span>24500 CE</span><span>96.85</span></div>
+            <div class="strike-row"><span>24600 CE</span><span>71.80</span></div>
+          </div>
+          <div class="rec-panel" style="right:0.7%;top:5%;width:24%;">
+            <div class="rec-head"><span class="live"><span class="rdot"></span>RECORDING</span><span class="count">Step 1</span></div>
+            <div class="rec-body">
+              <div class="step-node">
+                <div class="node-head">Step 1, in progress</div>
+                <div class="micro-log">
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></svg><span class="t">Recording started</span></div>
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg><span class="t">Circled: EMA 9/21 crossover</span></div>
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg><span class="t">Captured screenshot</span></div>
+                  <div class="micro-line pending"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"></circle></svg><span class="t">Selecting contract&hellip;</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">This is the CE pane's own strike picker, already part of the Scalper screen. 24400 is what's currently loaded.</p>
+    </section>
+
+    <!-- 10 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, step 1</span>
+      <h1>User clicks Buy on the selected contract.</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <img src="assets/scalper-spot.png" alt="Nubra Scalper screen, cursor clicking Buy on the 24400 CE ticket">
+          <div class="fake-cursor" style="--x0:8%;--y0:13%;--x1:8.4%;--y1:65.6%;"><svg viewBox="0 0 24 24" width="20" height="20"><path d="M5 3l14 6.5-6 2-2.5 6z" fill="#fff" stroke="#0a0b0d" stroke-width="1.2" stroke-linejoin="round"></path></svg></div>
+          <div class="click-ripple" style="--x1:8.4%;--y1:65.6%;"></div>
+          <div class="ring" style="left:2.9%;top:63.9%;width:11%;height:3.4%;"></div>
+          <div class="rec-panel" style="right:0.7%;top:5%;width:24%;">
+            <div class="rec-head"><span class="live"><span class="rdot"></span>RECORDING</span><span class="count">Step 1</span></div>
+            <div class="rec-body">
+              <div class="step-node">
+                <div class="node-head">Step 1, in progress</div>
+                <div class="micro-log">
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></svg><span class="t">Recording started</span></div>
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg><span class="t">Circled: EMA 9/21 crossover</span></div>
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg><span class="t">Captured screenshot</span></div>
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></svg><span class="t">NIFTY 24400 CE selected</span></div>
+                  <div class="micro-line" style="color:var(--buy);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:var(--buy);"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg><span class="t" style="color:var(--buy);">BUY &middot; 65 qty &middot; Rs 108.20</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">24400 CE, Buy, confirmed. Every line on the right just now was logged the moment it happened, not reconstructed afterward.</p>
+    </section>
+
+    <!-- 11 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, step 1</span>
+      <h1>User titles and describes the step.</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <img src="assets/scalper-spot.png" alt="Nubra Scalper screen, the same panel now asking to title and describe the step just logged">
+          <div class="rec-panel" style="right:0.7%;top:5%;width:26%;">
+            <div class="rec-head"><span class="live"><span class="rdot"></span>RECORDING</span><span class="count">Step 1</span></div>
+            <div class="rec-body">
+              <div class="step-node">
+                <div class="node-head">Step 1</div>
+                <div class="micro-log">
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></svg><span class="t">Recording started</span></div>
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg><span class="t">Circled: EMA 9/21 crossover</span></div>
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg><span class="t">Captured screenshot</span></div>
+                  <div class="micro-line"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></svg><span class="t">NIFTY 24400 CE selected</span></div>
+                  <div class="micro-line" style="color:var(--buy);"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="color:var(--buy);"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg><span class="t" style="color:var(--buy);">BUY &middot; 65 qty &middot; Rs 108.20</span></div>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="stepTitleA1">TITLE</label>
+                  <select class="field-select" id="stepTitleA1">
+                    <option>Finding the trade</option>
+                    <option selected>Entry</option>
+                    <option>Exit</option>
+                    <option>Adjustment</option>
+                    <option>Risk / Stop</option>
+                    <option>Note</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label class="field-label" for="stepDescA1">DESCRIBE IT</label>
+                  <textarea class="field-textarea" id="stepDescA1" rows="3">Buy when the fast EMA crosses above the slow EMA on the 5 minute chart.</textarea>
+                </div>
+              </div>
+            </div>
+            <div class="rec-actions"><div class="btn-mini">Save step &rsaquo;</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">Same panel, same step, nothing new opened. Title comes from the fixed list so categorization stays consistent; the description is free text. Saving collapses all of this into one line.</p>
+    </section>
+
+    <!-- 12 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, step 2</span>
+      <h1>The exit, captured the same way</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <img src="assets/scalper-spot.png" alt="Nubra Scalper screen, exit step captured with a sell click and narration">
+          <div class="ring" style="left:19.2%;top:63.9%;width:10.9%;height:3.4%;"></div>
+          <div class="rec-panel" style="right:0.7%;top:5%;width:22%;height:58%;">
+            <div class="rec-head"><span class="live done-state"><span class="rdot"></span>DONE</span><span class="count">2 of 2</span></div>
+            <div class="rec-body">
+              <div class="step">
+                <div class="step-top"><span class="badge buy">B</span><span class="step-title">BUY, 24400 CE</span></div>
+                <div class="step-sub">65 qty &middot; Rs 108.20</div>
+              </div>
+              <div class="step">
+                <div class="step-top"><span class="badge sell">S</span><span class="step-title">SELL, 24400 CE</span></div>
+                <div class="step-sub">65 qty &middot; Rs 96.00 &middot; 13:47:52</div>
+                <div class="step-note">Get out if it drops back below the slow EMA, or if I&rsquo;m down more than 2 percent.&rdquo;</div>
+              </div>
+            </div>
+            <div class="rec-actions"><div class="btn-mini">Finish recording</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">Two steps captured, entry and exit, in whatever order Aryan actually did them. Still nothing asked back, still quiet.</p>
+    </section>
+
+    <!-- 13 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, session complete</span>
+      <h1>Finish recording</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <img src="assets/scalper-spot.png" alt="Nubra Scalper screen, recorder session summary before hand off to the question stage">
+          <div class="rec-panel" style="right:0.7%;top:5%;width:24%;height:64%;">
+            <div class="rec-head"><span class="live done-state"><span class="rdot"></span>DONE</span><span class="count">2 of 2</span></div>
+            <div class="rec-body">
+              <div class="step">
+                <div class="step-top"><span class="badge buy">B</span><span class="step-title">BUY, 24400 CE</span></div>
+                <div class="step-sub">65 qty &middot; Rs 108.20</div>
+              </div>
+              <div class="step">
+                <div class="step-top"><span class="badge sell">S</span><span class="step-title">SELL, 24400 CE</span></div>
+                <div class="step-sub">65 qty &middot; Rs 96.00</div>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;padding:6px 2px 0;color:var(--buy);font-family:var(--font-mono);font-size:clamp(9px,2.3vw,10px);">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"></circle><path d="m8 12 3 3 5-6"></path></svg>
+                Session complete &middot; 4m 12s
+              </div>
+            </div>
+            <div class="rec-actions"><div class="btn-mini" style="width:100%;">See what&rsquo;s unresolved &rsaquo;</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">Everything is captured. Next: the one thing this session did not make clear, and nothing else.</p>
+    </section>
+
+    <!-- 14 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, adaptive resolution</span>
+      <h1>One thing was not clear</h1>
+      <div class="banner">Everything else was clear from what you did. One thing was not: no stop loss or target was ever recorded on either step. Should the exit also carry a hard percentage, on top of the EMA cross below?</div>
+      <div class="chip-row"><span class="chip primary">Add a 2% hard stop too</span><span class="chip">Just the crossover exit</span></div>
+      <p class="caption">Least friction. Stays silent through the whole recording and only speaks up for the one thing it genuinely could not infer from what you did.</p>
+    </section>
+
+    <!-- 15 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, compiled</span>
+      <h1>What comes out the other side</h1>
+      <div class="output-grid">
+        <div class="codeblock"><pre style="margin:0;white-space:pre-wrap;"><span class="k">"name"</span>: <span class="s">"EMA 9/21 Crossover, NIFTY"</span>,
+<span class="k">"instruments"</span>: [<span class="s">"NIFTY"</span>],
+<span class="k">"chart"</span>: { <span class="k">"interval"</span>: <span class="s">"5m"</span> },
+<span class="k">"entry"</span>: {
+  <span class="k">"side"</span>: <span class="s">"BUY"</span>,
+  <span class="k">"conditions"</span>: { <span class="k">"logic"</span>: <span class="s">"AND"</span>, <span class="k">"items"</span>: [
+    { <span class="k">"lhs"</span>: {<span class="k">"type"</span>:<span class="s">"EMA"</span>,<span class="k">"params"</span>:{<span class="k">"period"</span>:<span class="num">9</span>}},
+      <span class="k">"op"</span>: <span class="s">"crosses_above"</span>,
+      <span class="k">"rhs"</span>: {<span class="k">"type"</span>:<span class="s">"EMA"</span>,<span class="k">"params"</span>:{<span class="k">"period"</span>:<span class="num">21</span>}} }
+  ]}
+},
+<span class="k">"exit"</span>: {
+  <span class="k">"mode"</span>: <span class="s">"both"</span>,
+  <span class="k">"conditions"</span>: { <span class="k">"logic"</span>: <span class="s">"AND"</span>, <span class="k">"items"</span>: [
+    { <span class="k">"lhs"</span>: {<span class="k">"type"</span>:<span class="s">"EMA"</span>,<span class="k">"params"</span>:{<span class="k">"period"</span>:<span class="num">9</span>}},
+      <span class="k">"op"</span>: <span class="s">"crosses_below"</span>,
+      <span class="k">"rhs"</span>: {<span class="k">"type"</span>:<span class="s">"EMA"</span>,<span class="k">"params"</span>:{<span class="k">"period"</span>:<span class="num">21</span>}} }
+  ]},
+  <span class="k">"stop_loss_pct"</span>: <span class="num">2</span>
+},
+<span class="k">"execute"</span>: { <span class="k">"initial_capital"</span>: <span class="num">100000</span>, <span class="k">"holding_type"</span>: <span class="s">"intraday"</span> },
+<span class="k">"_source"</span>: <span class="s">"recorder_session_8f21c_adaptive"</span></pre></div>
+        <div>
+          <div class="chart-card">
+            <svg viewBox="0 0 560 170">
+              <line x1="20" y1="20" x2="20" y2="140" stroke="#262a33"></line>
+              <line x1="20" y1="140" x2="540" y2="140" stroke="#262a33"></line>
+              <path d="M20,140 L77.8,119.1 L135.6,128.3 L193.3,82.0 L251.1,97.6 L308.9,59.8 L366.7,76.1 L424.4,38.3 L482.2,53.9 L540,20" fill="none" stroke="#7c5cff" stroke-width="2.2"></path>
+              <path d="M20,140 L77.8,119.1 L135.6,128.3 L193.3,82.0 L251.1,97.6 L308.9,59.8 L366.7,76.1 L424.4,38.3 L482.2,53.9 L540,20 L540,140 Z" fill="rgba(124,92,255,0.14)" stroke="none"></path>
+              <circle cx="540" cy="20" r="3.5" fill="#7c5cff"></circle>
+              <text x="24" y="16" fill="#8b93a3" font-size="9" font-family="IBM Plex Mono">Rs 1,18,400</text>
+              <text x="24" y="152" fill="#8b93a3" font-size="9" font-family="IBM Plex Mono">Rs 1,00,000</text>
+              <text x="20" y="160" fill="#5b6272" font-size="9" font-family="IBM Plex Mono">1 Feb</text>
+              <text x="512" y="160" fill="#5b6272" font-size="9" font-family="IBM Plex Mono">5 May</text>
+            </svg>
+          </div>
+          <div class="stat-row">
+            <div class="stat-tile"><div class="v up">+18.4%</div><div class="l">RETURN, BACKTEST</div></div>
+            <div class="stat-tile"><div class="v down">-4.1%</div><div class="l">MAX DRAWDOWN</div></div>
+            <div class="stat-tile"><div class="v">61%</div><div class="l">WIN RATE</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">Backtest runs automatically against Nubra's own historical data, before a deploy button ever appears. This is the trust moment.</p>
+    </section>
+
+    <!-- 16 -->
+    <section class="slide">
+      <span class="eyebrow">Track A, hand off</span>
+      <h1>Saved under your name, deployed on Nubra's cloud</h1>
+      <div class="deploy-card">
+        <div class="path">STRATEGIES / RECORDED / 8f21c</div>
+        <h3>EMA 9/21 Crossover, NIFTY</h3>
+        <div class="owner">Saved under aryan.a@zanskar.xyz</div>
+        <div class="cta-mock">Open in Nubra Cloud to deploy <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></div>
+        <div class="cta-note">Mock control, not a live action in this prototype.</div>
+      </div>
+      <p class="caption">We do not run a broker connection or an execution engine ourselves. We hand off a saved, backtested strategy and get out of the way at the point where Nubra Cloud already takes over.</p>
+    </section>
+
+    <!-- 17 -->
+    <section class="slide">
+      <span class="eyebrow">Track B, before we start</span>
+      <h1>Same recorder, second track</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <span class="frame-tag">nubra.io/dashboard/scalper, F&amp;O analytics panel</span>
+          <img src="assets/scalper-fo-analytics.png" alt="Nubra Scalper screen with the F&amp;O analytics right rail panel open, showing an open interest bar chart by strike">
+          <div class="ring" style="left:55.8%;top:14%;width:18.5%;height:19%;"></div>
+          <div class="callout" style="left:57%;top:9%;">OI BY STRIKE, right rail</div>
+        </div>
+      </div>
+      <p class="caption">Instead of the chart, Aryan watches the option chain: OI, LTP change, PCR. This is the shape of it, calls and puts by strike. The next step zooms into the exact rows.</p>
+    </section>
+
+    <!-- 18 -->
+    <section class="slide">
+      <span class="eyebrow">Track B, step 1</span>
+      <h1>One observation, two legs</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <img src="assets/scalper-optionchain.png" alt="Nubra Scalper screen, OI building up on the 24400 call and put, two sell legs captured as one step with sub-steps">
+          <div class="ring" style="left:63%;top:37.5%;width:12.5%;height:5%;"></div>
+          <div class="callout" style="left:59%;top:32%;">OI building up, both sides</div>
+          <div class="rec-panel" style="left:1.5%;top:5%;width:20%;height:53%;">
+            <div class="rec-head"><span class="live"><span class="rdot"></span>RECORDING</span><span class="count">Step 1</span></div>
+            <div class="rec-body">
+              <div class="step">
+                <div class="step-top"><span class="step-title">OI pin forming, 24400</span></div>
+                <div class="step-sub">parent step, 2 sub-steps</div>
+              </div>
+              <div class="step sub">
+                <div class="step-top"><span class="badge sell">S</span><span class="step-title">SELL, 24400 CE</span></div>
+                <div class="step-sub">65 qty &middot; Rs 71.35</div>
+              </div>
+              <div class="step sub">
+                <div class="step-top"><span class="badge sell">S</span><span class="step-title">SELL, 24400 PE</span></div>
+                <div class="step-sub">65 qty &middot; Rs 74.30</div>
+              </div>
+            </div>
+            <div class="rec-actions"><div class="btn-mini">Mark step done</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">One parent step, "OI pin forming," with the two leg fills nested under it, captured in whatever order the clicks actually happened.</p>
+    </section>
+
+    <!-- 19 -->
+    <section class="slide">
+      <span class="eyebrow">Track B, narrate and finish</span>
+      <h1>Say why, once, for the whole step</h1>
+      <div class="frame-wrap">
+        <div class="frame">
+          <img src="assets/scalper-optionchain.png" alt="Nubra Scalper screen, narration for the straddle sell and finish recording">
+          <div class="rec-panel" style="left:1.5%;top:5%;width:20%;height:40%;">
+            <div class="rec-head"><span class="live done-state"><span class="rdot"></span>DONE</span><span class="count">1 of 1</span></div>
+            <div class="rec-body">
+              <div class="step">
+                <div class="step-top"><span class="step-title">OI pin forming, 24400</span></div>
+                <div class="step-note">Selling the ATM straddle, OI just built up hard on both the call and the put at 24400, looks like a pin into expiry.&rdquo;</div>
+              </div>
+            </div>
+            <div class="rec-actions"><div class="btn-mini">Finish recording</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">One narration, attached to the parent step, covers both legs. Adaptive stays quiet here too, same as track A.</p>
+    </section>
+
+    <!-- 20 -->
+    <section class="slide">
+      <span class="eyebrow">Track B, adaptive resolution</span>
+      <h1>One thing was not clear here either</h1>
+      <div class="banner">Everything else read cleanly from the option chain. One thing did not: no exit rule was ever recorded for this straddle. Exit on a fixed day count before expiry, on a premium crush, or both?</div>
+      <div class="chip-row"><span class="chip primary">Exit 2 days before expiry</span><span class="chip">Exit on 50% premium crush</span></div>
+      <p class="caption">Same pattern as track A: silence, then one sharp question, aimed exactly at the gap.</p>
+    </section>
+
+    <!-- 21 -->
+    <section class="slide">
+      <span class="eyebrow">Track B, compiled</span>
+      <h1>A leg basket, wrapped in a trigger</h1>
+      <div class="output-grid">
+        <div class="codeblock"><pre style="margin:0;white-space:pre-wrap;"><span class="k">"basket_name"</span>: <span class="s">"Sell ATM Straddle, OI Pin (NIFTY)"</span>,
+<span class="k">"trigger"</span>: {
+  <span class="k">"watch"</span>: <span class="s">"option_chain"</span>,
+  <span class="k">"underlying"</span>: <span class="s">"NIFTY"</span>,
+  <span class="k">"condition"</span>: {
+    <span class="k">"type"</span>: <span class="s">"OI_BUILD_UP"</span>,
+    <span class="k">"params"</span>: {
+      <span class="k">"strike"</span>: <span class="s">"ATM"</span>,
+      <span class="k">"window"</span>: <span class="s">"5m"</span>,
+      <span class="k">"min_oi_change_pct"</span>: <span class="num">15</span>,
+      <span class="k">"sides"</span>: [<span class="s">"CE"</span>, <span class="s">"PE"</span>]
+    }
+  }
+},
+<span class="k">"legs"</span>: [
+  { <span class="k">"symbol"</span>: <span class="s">"NIFTY18AUG2624400CE"</span>, <span class="k">"side"</span>: <span class="s">"SELL"</span>, <span class="k">"qty"</span>: <span class="num">65</span> },
+  { <span class="k">"symbol"</span>: <span class="s">"NIFTY18AUG2624400PE"</span>, <span class="k">"side"</span>: <span class="s">"SELL"</span>, <span class="k">"qty"</span>: <span class="num">65</span> }
+],
+<span class="k">"exit"</span>: { <span class="k">"type"</span>: <span class="s">"TIME_BASED"</span>, <span class="k">"params"</span>: { <span class="k">"exit_days_before_expiry"</span>: <span class="num">2</span> } },
+<span class="k">"_source"</span>: <span class="s">"recorder_session_c4a90_adaptive"</span></pre></div>
+        <div>
+          <div class="col-card">
+            <span class="tag">WHY OI_BUILD_UP, NOT A NEW SCANNER</span>
+            <p>"OI just built up too fast" binds to a condition shape the option chain scanners already speak, the same family as the OI wall and IV expansion detectors. Recording never has to invent a new vocabulary.</p>
+          </div>
+          <div class="stat-row">
+            <div class="stat-tile"><div class="v">Rs 4,522</div><div class="l">MARGIN, CHECKED LIVE</div></div>
+            <div class="stat-tile"><div class="v">0.88</div><div class="l">PCR AT CAPTURE</div></div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">Legs, price, and margin are re-checked against the live option chain before this ever reaches a deploy screen, the same way a manually built basket would be.</p>
+    </section>
+
+    <!-- 22 -->
+    <section class="slide">
+      <span class="eyebrow">Closing, Adaptive</span>
+      <h1>This is the least-friction version. Compare it against the other two.</h1>
+      <div class="closing-list">
+        <div class="closing-row"><span class="q see">SEE ALSO</span><span class="a"><strong>Batch</strong> reviews everything in one sitting, even when nothing is ambiguous. <strong>Inline</strong> confirms after every single step. Same two tracks, same recorder, different amount of interruption.</span></div>
+        <div class="closing-row"><span class="q">OPEN</span><span class="a"><strong>Narration input.</strong> Typed, spoken, or both. This walkthrough shows both affordances without picking.</span></div>
+        <div class="closing-row"><span class="q">OPEN</span><span class="a"><strong>Recorder entry point.</strong> Right-rail icon or top toolbar, toggled at the top of this page. The working panel stays put either way.</span></div>
+      </div>
+      <p class="footnote">Screenshots are Nubra's live Scalper UI, captured 14 Aug 2026. Every recorder panel, strip, ring, and callout drawn on top is proposed for this prototype, not built.</p>
+    </section>
+
+  </div>
+
+  <div class="bottombar">
+    <button class="navbtn" id="prevBtn">&larr; Prev</button>
+    <div class="dots" id="dots"></div>
+    <span class="counter" id="counter">1 / 22</span>
+    <button class="navbtn" id="nextBtn">Next &rarr;</button>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
