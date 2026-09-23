@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/nubra-design-system-019de8c2-80b5-706c-8ec4-a40abe17f94f/colors_and_type.css">
+  <script src="_ds/nubra-design-system-019de8c2-80b5-706c-8ec4-a40abe17f94f/_ds_bundle.js"></script>
+  <style>
+    html, body { margin: 0; padding: 0; background: rgb(6,10,15); }
+    * { box-sizing: border-box; }
+    button { font-family: inherit; }
+    input, select { font-family: inherit; }
+    a { color: rgb(120,201,255); text-decoration: none; }
+    a:hover { color: rgb(0,120,206); }
+    ::selection { background: rgba(0,120,206,.35); }
+    input::placeholder { color: rgb(118,130,143); }
+    select option { background: rgb(12,16,22); color: rgb(245,245,255); }
+    @keyframes nbFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+  </style>
+</helmet>
+
+<div style="display:flex;min-height:100vh;width:100%;font-family:var(--font-sans);color:var(--dark-fg-1);background:radial-gradient(900px 520px at 12% -8%, rgba(25,111,82,.30), transparent 62%), radial-gradient(1100px 620px at 82% -6%, rgba(27,83,129,.42), transparent 66%), rgb(6,10,15)">
+
+  <div style="width:48px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:16px;padding:12px 6px;background:rgba(8,8,8,.45);border-right:1px solid var(--dark-border)">
+    <div style="width:36px;height:36px;border-radius:8px;background:var(--nubra-blue-400);display:grid;place-items:center">
+      <img src="icons/logo-mark.svg" alt="Nubra" style="width:18px;height:18px;filter:brightness(0) invert(1)">
+    </div>
+    <div style="display:flex;flex-direction:column;gap:4px;flex:1">
+      <button onClick="{{ goSetups }}" title="Setups" style="width:36px;height:36px;border:0;padding:0;cursor:pointer;border-radius:8px;background:rgba(0,120,206,.20);display:grid;place-items:center">
+        <img src="icons/strategies.svg" alt="" style="width:20px;height:20px;filter:brightness(0) invert(1)">
+      </button>
+      <div title="Watchlist" style="width:36px;height:36px;border-radius:8px;display:grid;place-items:center">
+        <img src="icons/watchlist.svg" alt="" style="width:20px;height:20px;filter:brightness(0) invert(1);opacity:.42">
+      </div>
+      <div title="Option chain" style="width:36px;height:36px;border-radius:8px;display:grid;place-items:center">
+        <img src="icons/option-chain.svg" alt="" style="width:20px;height:20px;filter:brightness(0) invert(1);opacity:.42">
+      </div>
+      <div title="Orders" style="width:36px;height:36px;border-radius:8px;display:grid;place-items:center">
+        <img src="icons/order.svg" alt="" style="width:20px;height:20px;filter:brightness(0) invert(1);opacity:.42">
+      </div>
+      <div title="Portfolio" style="width:36px;height:36px;border-radius:8px;display:grid;place-items:center">
+        <img src="icons/portfolio.svg" alt="" style="width:20px;height:20px;filter:brightness(0) invert(1);opacity:.42">
+      </div>
+      <div title="Scalper" style="width:36px;height:36px;border-radius:8px;display:grid;place-items:center">
+        <img src="icons/scalper.svg" alt="" style="width:20px;height:20px;filter:brightness(0) invert(1);opacity:.42">
+      </div>
+    </div>
+    <div title="Settings" style="width:36px;height:36px;border-radius:8px;display:grid;place-items:center">
+      <img src="icons/settings.svg" alt="" style="width:20px;height:20px;filter:brightness(0) invert(1);opacity:.42">
+    </div>
+  </div>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+
+    <div style="height:48px;flex-shrink:0;display:flex;align-items:center;gap:12px;padding:0 20px;border-bottom:1px solid var(--dark-border);background:rgba(8,8,8,.35)">
+      <span style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.08em;color:var(--dark-fg-3)">Setup Builder</span>
+      <span style="color:var(--dark-fg-3);opacity:.5">/</span>
+      <span style="font:var(--t-body-m);color:var(--dark-fg-1)">{{ crumb }}</span>
+      <div style="flex:1"></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="display:inline-flex;align-items:center;gap:6px;font:var(--t-label-m);color:var(--dark-fg-2);padding:5px 10px;border-radius:999px;border:1px solid var(--dark-border)">
+          <span style="width:6px;height:6px;border-radius:999px;background:var(--up-300)"></span>NSE open · 14:12 IST
+        </span>
+        <button onClick="{{ toggleFlags }}" title="Toggle PRD open-question annotations" style="display:inline-flex;align-items:center;gap:6px;font:var(--t-label-m);color:var(--dark-fg-2);padding:6px 10px;border-radius:999px;border:1px solid var(--dark-border);background:transparent;cursor:pointer">
+          <img src="icons/signals.svg" alt="" style="width:12px;height:12px;filter:brightness(0) invert(1);opacity:.6">PRD flags
+        </button>
+      </div>
+    </div>
+
+    <div style="flex:1;min-width:0;overflow:auto">
+
+      <sc-if value="{{ isSetups }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="My Setups" style="padding:24px 28px 48px;animation:nbFade 200ms var(--ease-out)">
+          <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px;margin-bottom:20px">
+            <div style="flex:1;min-width:260px">
+              <div style="font:var(--t-h3);letter-spacing:-.01em;color:var(--dark-fg-1)">My Setups</div>
+              <div style="font:var(--t-body-m);color:var(--dark-fg-2);margin-top:4px">{{ setupsSubtitle }}</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button onClick="{{ toggleEmpty }}" style="height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--dark-border);background:transparent;color:var(--dark-fg-2);font:var(--t-body-m);cursor:pointer">{{ emptyToggleLabel }}</button>
+              <button onClick="{{ goOverlap }}" style="height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(120,201,255,.35);background:rgba(0,120,206,.14);color:rgb(120,201,255);font:var(--t-body-m);cursor:pointer">Compare setups</button>
+              <button onClick="{{ newSetup }}" style="height:36px;padding:0 16px;border-radius:999px;border:0;background:var(--nubra-blue-400);color:var(--fg-on-primary);font:var(--t-body-m);cursor:pointer">New setup</button>
+            </div>
+          </div>
+
+          <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1px solid var(--dark-border);border-radius:16px;background:rgba(255,255,255,.035);padding:56px 32px;text-align:center">
+              <div style="width:56px;height:56px;margin:0 auto 16px;border-radius:14px;background:rgba(0,120,206,.16);display:grid;place-items:center">
+                <img src="icons/add-list.svg" alt="" style="width:24px;height:24px;filter:brightness(0) invert(1);opacity:.8">
+              </div>
+              <div style="font:var(--t-h5);color:var(--dark-fg-1)">No setups yet</div>
+              <div style="font:var(--t-body-m);color:var(--dark-fg-2);max-width:460px;margin:8px auto 24px;text-wrap:pretty">A setup is a named, scheduled screen. Pick a universe, add conditions — all combined with AND — and every run drops its matches here.</div>
+              <button onClick="{{ newSetup }}" style="height:44px;padding:0 22px;border-radius:999px;border:0;background:var(--nubra-blue-400);color:var(--fg-on-primary);font:var(--t-body-l);cursor:pointer">Create your first setup</button>
+              <div style="margin-top:32px;font:var(--t-label-s);text-transform:uppercase;letter-spacing:.08em;color:var(--dark-fg-3)">Or start from a shape</div>
+              <div style="display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:12px">
+                <sc-for list="{{ starters }}" as="st" hint-placeholder-count="3">
+                  <button onClick="{{ st.onPick }}" style="text-align:left;width:240px;padding:14px;border-radius:12px;border:1px solid var(--dark-border);background:rgba(255,255,255,.03);cursor:pointer">
+                    <div style="font:var(--t-body-m);color:var(--dark-fg-1)">{{ st.name }}</div>
+                    <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:4px">{{ st.desc }}</div>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ notEmpty }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px">
+              <sc-for list="{{ setupCards }}" as="c" hint-placeholder-count="3">
+                <div style="border:1px solid var(--dark-border);border-radius:14px;background:rgba(255,255,255,.035);padding:16px;display:flex;flex-direction:column;gap:14px">
+                  <div style="display:flex;align-items:flex-start;gap:8px">
+                    <div style="flex:1;min-width:0">
+                      <div style="display:flex;align-items:center;gap:8px">
+                        <span style="font:var(--t-h6);color:var(--dark-fg-1)">{{ c.name }}</span>
+                        <span style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.06em;padding:3px 7px;border-radius:999px;background:rgba(245,245,255,.08);color:var(--dark-fg-2)">{{ c.status }}</span>
+                      </div>
+                      <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:5px">{{ c.universe }}</div>
+                    </div>
+                    <img src="icons/more.svg" alt="" style="width:16px;height:16px;filter:brightness(0) invert(1);opacity:.4">
+                  </div>
+
+                  <div style="display:flex;align-items:flex-end;gap:16px">
+                    <div>
+                      <div style="font-family:var(--font-display);font-size:30px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--dark-fg-1)">{{ c.matched }}<span style="font-size:18px;color:var(--dark-fg-3)">{{ c.ofTotal }}</span></div>
+                      <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-top:6px">matched / universe</div>
+                    </div>
+                    <div style="flex:1"></div>
+                    <div style="text-align:right">
+                      <div style="font-family:var(--font-display);font-size:18px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;color:var(--warn-500);filter:brightness(1.5)">{{ c.nearMiss }}</div>
+                      <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-top:6px">{{ c.nearMissLabel }}</div>
+                    </div>
+                  </div>
+
+                  <div style="display:flex;flex-wrap:wrap;gap:6px">
+                    <span style="font:var(--t-label-m);padding:4px 9px;border-radius:999px;background:rgba(245,245,255,.06);color:var(--dark-fg-2)">{{ c.schedule }}</span>
+                    <span style="font:var(--t-label-m);padding:4px 9px;border-radius:999px;background:rgba(245,245,255,.06);color:var(--dark-fg-2)">{{ c.condCount }}</span>
+                    <sc-if value="{{ c.hasBinding }}" hint-placeholder-val="{{ true }}">
+                      <span style="font:var(--t-label-m);padding:4px 9px;border-radius:999px;background:rgba(0,120,206,.16);color:rgb(120,201,255)">{{ c.binding }}</span>
+                    </sc-if>
+                  </div>
+
+                  <sc-if value="{{ c.diffKnown }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;align-items:center;gap:10px;font:var(--t-body-s);color:var(--dark-fg-2);border-top:1px solid var(--dark-border);padding-top:12px">
+                      <span style="color:var(--up-300);font-variant-numeric:tabular-nums">{{ c.added }}</span>
+                      <span style="color:var(--down-500);font-variant-numeric:tabular-nums">{{ c.dropped }}</span>
+                      <span style="flex:1"></span>
+                      <span>{{ c.lastRun }}</span>
+                    </div>
+                  </sc-if>
+
+                  <div style="display:flex;gap:8px">
+                    <button onClick="{{ c.onOpen }}" style="flex:1;height:36px;border-radius:999px;border:1px solid rgba(120,201,255,.3);background:rgba(0,120,206,.14);color:rgb(120,201,255);font:var(--t-body-m);cursor:pointer">Open</button>
+                    <button onClick="{{ c.onEdit }}" style="height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--dark-border);background:transparent;color:var(--dark-fg-2);font:var(--t-body-m);cursor:pointer">Edit</button>
+                    <button onClick="{{ c.onRun }}" title="Run now" style="height:36px;padding:0 12px;border-radius:999px;border:1px dashed rgba(177,102,16,.55);background:transparent;color:#E8B268;font:var(--t-body-m);cursor:pointer">Run now</button>
+                  </div>
+                  <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                    <div style="font:var(--t-label-m);color:#E8B268;opacity:.85">Open §12.9 — on-demand “run now” is not in the spec yet</div>
+                  </sc-if>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isDetail }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Setup detail" style="padding:20px 28px 48px;animation:nbFade 200ms var(--ease-out)">
+          <button onClick="{{ goSetups }}" style="border:0;background:transparent;color:var(--dark-fg-2);font:var(--t-body-m);cursor:pointer;padding:0;margin-bottom:14px">← My Setups</button>
+
+          <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px;margin-bottom:18px">
+            <div style="flex:1;min-width:280px">
+              <div style="display:flex;align-items:center;gap:10px">
+                <span style="font:var(--t-h3);letter-spacing:-.01em">{{ d.name }}</span>
+                <span style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.06em;padding:4px 8px;border-radius:999px;background:rgba(245,245,255,.08);color:var(--dark-fg-2)">{{ d.status }}</span>
+              </div>
+              <div style="font:var(--t-body-m);color:var(--dark-fg-2);margin-top:6px">{{ d.metaLine }}</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button onClick="{{ editCurrent }}" style="height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--dark-border);background:transparent;color:var(--dark-fg-2);font:var(--t-body-m);cursor:pointer">Edit conditions</button>
+              <button onClick="{{ goOverlap }}" style="height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(120,201,255,.3);background:rgba(0,120,206,.14);color:rgb(120,201,255);font:var(--t-body-m);cursor:pointer">Compare with…</button>
+            </div>
+          </div>
+
+          <sc-if value="{{ d.preOpenBlocked }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:12px;background:rgba(177,102,16,.14);border:1px solid rgba(177,102,16,.45);margin-bottom:16px">
+              <img src="icons/set-alert.svg" alt="" style="width:18px;height:18px;margin-top:1px;filter:brightness(0) invert(1);opacity:.85">
+              <div>
+                <div style="font:var(--t-body-m);color:#F2C78A">Pre-open runs are blocked for this setup</div>
+                <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:3px;text-wrap:pretty">{{ d.preOpenReason }} No partial evaluation happens — the whole run is skipped and you’re told why (§5.3).</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px">
+            <sc-for list="{{ d.stats }}" as="s" hint-placeholder-count="5">
+              <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.035);padding:14px">
+                <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3)">{{ s.label }}</div>
+                <div style="font-family:var(--font-display);font-size:22px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:8px;color:var(--dark-fg-1)">{{ s.value }}</div>
+                <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:3px">{{ s.sub }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;gap:6px;border-bottom:1px solid var(--dark-border);margin-bottom:16px;flex-wrap:wrap">
+            <sc-for list="{{ d.tabs }}" as="t" hint-placeholder-count="4">
+              <button onClick="{{ t.onClick }}" style="border:0;background:transparent;cursor:pointer;padding:10px 12px;font:var(--t-body-m);color:{{ t.color }};border-bottom:2px solid {{ t.underline }}">{{ t.label }}</button>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ d.showMatches }}" hint-placeholder-val="{{ true }}">
+            <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.03);overflow:hidden">
+              <div style="display:grid;grid-template-columns:minmax(150px,1.3fr) 110px 110px minmax(160px,1.6fr) 36px;gap:12px;padding:10px 16px;background:rgba(8,8,8,.45);font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3)">
+                <div>Instrument</div><div style="text-align:right">LTP</div><div style="text-align:right">Chg %</div><div>Conditions</div><div></div>
+              </div>
+              <sc-for list="{{ d.matchRows }}" as="r" hint-placeholder-count="8">
+                <div style="border-top:1px solid var(--dark-border)">
+                  <div onClick="{{ r.onToggle }}" style="display:grid;grid-template-columns:minmax(150px,1.3fr) 110px 110px minmax(160px,1.6fr) 36px;gap:12px;padding:12px 16px;cursor:pointer;align-items:center" style-hover="background:rgba(255,255,255,.04)">
+                    <div>
+                      <div style="font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:.02em">{{ r.sym }}</div>
+                      <div style="font:var(--t-body-s);color:var(--dark-fg-3);margin-top:2px">{{ r.name }}</div>
+                    </div>
+                    <div style="text-align:right;font:var(--t-mono-l);font-variant-numeric:tabular-nums;color:var(--dark-fg-1)">{{ r.ltp }}</div>
+                    <div style="text-align:right;font:var(--t-mono-l);font-variant-numeric:tabular-nums;color:{{ r.chgColor }}">{{ r.chg }}</div>
+                    <div style="display:flex;align-items:center;gap:8px">
+                      <div style="flex:1;height:4px;border-radius:999px;background:rgba(245,245,255,.1);overflow:hidden">
+                        <div style="height:100%;width:{{ r.pctWidth }};background:var(--up-300)"></div>
+                      </div>
+                      <span style="font:var(--t-mono-m);color:var(--up-300);font-variant-numeric:tabular-nums">{{ r.ratio }}</span>
+                    </div>
+                    <div style="text-align:right;color:var(--dark-fg-3);font:var(--t-body-s)">{{ r.caret }}</div>
+                  </div>
+                  <sc-if value="{{ r.open }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:4px 16px 16px 16px;background:rgba(0,0,0,.25)">
+                      <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin:8px 0 8px">Condition evaluation · this run</div>
+                      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px">
+                        <sc-for list="{{ r.evalMet }}" as="e" hint-placeholder-count="3">
+                          <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;background:rgba(81,176,50,.12);border:1px solid rgba(124,207,94,.28)">
+                            <span style="color:var(--up-300);font-size:12px">✓</span>
+                            <span style="flex:1;font:var(--t-body-s);color:var(--dark-fg-1)">{{ e.label }}</span>
+                            <span style="font:var(--t-mono-m);color:var(--up-300)">{{ e.val }}</span>
+                          </div>
+                        </sc-for>
+                        <sc-for list="{{ r.evalMissed }}" as="e" hint-placeholder-count="0">
+                          <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;background:rgba(241,66,66,.10);border:1px solid rgba(241,66,66,.3)">
+                            <span style="color:var(--down-500);font-size:12px">✕</span>
+                            <span style="flex:1;font:var(--t-body-s);color:var(--dark-fg-1)">{{ e.label }}</span>
+                            <span style="font:var(--t-mono-m);color:var(--down-500)">{{ e.val }}</span>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <div style="padding:10px 16px;border-top:1px solid var(--dark-border);font:var(--t-body-s);color:var(--dark-fg-3)">{{ d.matchFoot }}</div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:16px">
+              <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.03);padding:14px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                  <span style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--up-300)">Added since last run</span>
+                  <span style="font:var(--t-mono-m);color:var(--dark-fg-3)">{{ d.addedCount }}</span>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <sc-for list="{{ d.added }}" as="a" hint-placeholder-count="3">
+                    <span style="font-family:var(--font-display);font-size:12px;font-weight:600;padding:5px 9px;border-radius:999px;background:rgba(81,176,50,.14);color:var(--up-300)">{{ a.sym }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.03);padding:14px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                  <span style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--down-500)">Dropped since last run</span>
+                  <span style="font:var(--t-mono-m);color:var(--dark-fg-3)">{{ d.droppedCount }}</span>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px">
+                  <sc-for list="{{ d.dropped }}" as="a" hint-placeholder-count="2">
+                    <span style="font-family:var(--font-display);font-size:12px;font-weight:600;padding:5px 9px;border-radius:999px;background:rgba(241,66,66,.12);color:var(--down-500)">{{ a.sym }}</span>
+                  </sc-for>
+                </div>
+                <div style="font:var(--t-body-s);color:var(--dark-fg-3);margin-top:10px">Diff is run-over-run only, and never written to a bound watchlist (§5.4).</div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ d.showNear }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.03);overflow:hidden">
+              <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 16px;background:rgba(177,102,16,.10);border-bottom:1px solid rgba(177,102,16,.3)">
+                <span style="font:var(--t-body-m);color:#F2C78A">{{ d.nearHeadline }}</span>
+                <span style="flex:1"></span>
+                <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                  <span style="font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:4px 8px;border-radius:999px">Open §12.10 — mandatory or optional? default %?</span>
+                </sc-if>
+              </div>
+              <div style="display:grid;grid-template-columns:minmax(150px,1.3fr) 100px 90px minmax(200px,2fr) 36px;gap:12px;padding:10px 16px;background:rgba(8,8,8,.45);font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3)">
+                <div>Instrument</div><div style="text-align:right">LTP</div><div style="text-align:right">Match %</div><div>Missed</div><div></div>
+              </div>
+              <sc-for list="{{ d.nearRows }}" as="r" hint-placeholder-count="6">
+                <div style="border-top:1px solid var(--dark-border)">
+                  <div onClick="{{ r.onToggle }}" style="display:grid;grid-template-columns:minmax(150px,1.3fr) 100px 90px minmax(200px,2fr) 36px;gap:12px;padding:12px 16px;cursor:pointer;align-items:center" style-hover="background:rgba(255,255,255,.04)">
+                    <div>
+                      <div style="font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:.02em">{{ r.sym }}</div>
+                      <div style="font:var(--t-body-s);color:var(--dark-fg-3);margin-top:2px">{{ r.name }}</div>
+                    </div>
+                    <div style="text-align:right;font:var(--t-mono-l);font-variant-numeric:tabular-nums">{{ r.ltp }}</div>
+                    <div style="text-align:right;font:var(--t-mono-l);font-variant-numeric:tabular-nums;color:#F2C78A">{{ r.matchPct }}</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px">
+                      <sc-for list="{{ r.missedChips }}" as="m" hint-placeholder-count="1">
+                        <span style="font:var(--t-label-m);padding:4px 8px;border-radius:999px;background:rgba(241,66,66,.12);color:var(--down-500)">{{ m.label }}</span>
+                      </sc-for>
+                    </div>
+                    <div style="text-align:right;color:var(--dark-fg-3);font:var(--t-body-s)">{{ r.caret }}</div>
+                  </div>
+                  <sc-if value="{{ r.open }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:4px 16px 16px;background:rgba(0,0,0,.25)">
+                      <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin:8px 0 8px">Condition evaluation · this run</div>
+                      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px">
+                        <sc-for list="{{ r.evalMet }}" as="e" hint-placeholder-count="3">
+                          <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;background:rgba(81,176,50,.12);border:1px solid rgba(124,207,94,.28)">
+                            <span style="color:var(--up-300);font-size:12px">✓</span>
+                            <span style="flex:1;font:var(--t-body-s);color:var(--dark-fg-1)">{{ e.label }}</span>
+                            <span style="font:var(--t-mono-m);color:var(--up-300)">{{ e.val }}</span>
+                          </div>
+                        </sc-for>
+                        <sc-for list="{{ r.evalMissed }}" as="e" hint-placeholder-count="1">
+                          <div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;background:rgba(241,66,66,.10);border:1px solid rgba(241,66,66,.3)">
+                            <span style="color:var(--down-500);font-size:12px">✕</span>
+                            <span style="flex:1;font:var(--t-body-s);color:var(--dark-fg-1)">{{ e.label }}</span>
+                            <span style="font:var(--t-mono-m);color:var(--down-500)">{{ e.val }}</span>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <div style="padding:10px 16px;border-top:1px solid var(--dark-border);font:var(--t-body-s);color:var(--dark-fg-3)">Near-miss instruments never sync to a bound watchlist (§5.5) and appear only on this page.</div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ d.showConds }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.03);overflow:hidden">
+              <div style="padding:12px 16px;background:rgba(8,8,8,.45);font:var(--t-body-m);color:var(--dark-fg-2)">{{ d.condHeadline }}</div>
+              <sc-for list="{{ d.condList }}" as="c" hint-placeholder-count="5">
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:13px 16px;border-top:1px solid var(--dark-border)">
+                  <span style="font:var(--t-mono-m);color:var(--dark-fg-3);width:26px">{{ c.idx }}</span>
+                  <span style="font:var(--t-body-m);color:var(--dark-fg-1)">{{ c.label }}</span>
+                  <span style="font:var(--t-mono-l);color:rgb(120,201,255)">{{ c.expr }}</span>
+                  <span style="flex:1"></span>
+                  <span style="font:var(--t-label-m);padding:4px 8px;border-radius:999px;background:rgba(245,245,255,.07);color:var(--dark-fg-2)">{{ c.source }}</span>
+                  <span style="font:var(--t-label-m);padding:4px 8px;border-radius:999px;background:{{ c.preBg }};color:{{ c.preColor }}">{{ c.pre }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ d.showRuns }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.03);overflow:hidden">
+              <div style="display:grid;grid-template-columns:minmax(150px,1fr) 130px 110px 110px 110px;gap:12px;padding:10px 16px;background:rgba(8,8,8,.45);font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3)">
+                <div>Triggered</div><div>Status</div><div style="text-align:right">Universe</div><div style="text-align:right">Matched</div><div style="text-align:right">Near-miss</div>
+              </div>
+              <sc-for list="{{ d.runs }}" as="r" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:minmax(150px,1fr) 130px 110px 110px 110px;gap:12px;padding:12px 16px;border-top:1px solid var(--dark-border);align-items:center">
+                  <div style="font:var(--t-mono-m);color:var(--dark-fg-1)">{{ r.when }}</div>
+                  <div><span style="font:var(--t-label-m);padding:4px 8px;border-radius:999px;background:{{ r.bg }};color:{{ r.color }}">{{ r.status }}</span></div>
+                  <div style="text-align:right;font:var(--t-mono-m);color:var(--dark-fg-2)">{{ r.universe }}</div>
+                  <div style="text-align:right;font:var(--t-mono-m);color:var(--dark-fg-1)">{{ r.matched }}</div>
+                  <div style="text-align:right;font:var(--t-mono-m);color:#F2C78A">{{ r.near }}</div>
+                </div>
+              </sc-for>
+              <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                <div style="padding:12px 16px;border-top:1px solid var(--dark-border);font:var(--t-label-m);color:#E8B268">Deferred §12.4 — run-history retention window is pending the storage costing pass. Diff needs ≥2 runs.</div>
+              </sc-if>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isBuilder }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Setup Builder" style="padding:20px 28px 64px;animation:nbFade 200ms var(--ease-out)">
+          <div style="display:flex;flex-wrap:wrap;align-items:flex-end;gap:16px;margin-bottom:18px">
+            <div style="flex:1;min-width:240px">
+              <button onClick="{{ goSetups }}" style="border:0;background:transparent;color:var(--dark-fg-2);font:var(--t-body-m);cursor:pointer;padding:0;margin-bottom:10px">← My Setups</button>
+              <div style="font:var(--t-h3);letter-spacing:-.01em">{{ b.heading }}</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px;padding:4px;border-radius:999px;border:1px solid var(--dark-border);background:rgba(8,8,8,.4)">
+              <span style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);padding:0 8px">Layout</span>
+              <button onClick="{{ b.pickSplit }}" style="height:30px;padding:0 14px;border-radius:999px;border:0;cursor:pointer;font:var(--t-body-m);background:{{ b.splitBg }};color:{{ b.splitFg }}">A · Split canvas</button>
+              <button onClick="{{ b.pickWizard }}" style="height:30px;padding:0 14px;border-radius:999px;border:0;cursor:pointer;font:var(--t-body-m);background:{{ b.wizardBg }};color:{{ b.wizardFg }}">B · Guided steps</button>
+            </div>
+          </div>
+
+          <sc-if value="{{ b.isWizard }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px;padding:12px 14px;border:1px solid var(--dark-border);border-radius:12px;background:rgba(8,8,8,.35)">
+              <sc-for list="{{ b.steps }}" as="s" hint-placeholder-count="5">
+                <button onClick="{{ s.onClick }}" style="display:flex;align-items:center;gap:8px;border:0;background:transparent;cursor:pointer;padding:6px 10px;border-radius:999px;background:{{ s.bg }}">
+                  <span style="width:20px;height:20px;border-radius:999px;display:grid;place-items:center;font:var(--t-label-m);background:{{ s.dotBg }};color:{{ s.dotFg }}">{{ s.n }}</span>
+                  <span style="font:var(--t-body-m);color:{{ s.fg }}">{{ s.label }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start">
+            <div style="flex:3 1 520px;min-width:300px;display:flex;flex-direction:column;gap:16px">
+
+              <sc-if value="{{ b.showUniverse }}" hint-placeholder-val="{{ true }}">
+                <div style="border:1px solid var(--dark-border);border-radius:14px;background:rgba(255,255,255,.035);padding:18px">
+                  <div style="font:var(--t-h6);margin-bottom:4px">Name &amp; universe</div>
+                  <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-bottom:16px">The universe is picked from a fixed catalog — never free-form (§5.1).</div>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+                    <label style="display:block">
+                      <span style="display:block;font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-bottom:7px">Setup name</span>
+                      <input value="{{ b.name }}" onChange="{{ b.onName }}" placeholder="e.g. Oversold F&amp;O longs" style="width:100%;height:44px;padding:0 14px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.35);color:var(--dark-fg-1);font:var(--t-body-m);outline:none" style-focus="border-color:var(--nubra-blue-400);box-shadow:var(--elev-glow-blue)">
+                    </label>
+                    <label style="display:block">
+                      <span style="display:block;font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-bottom:7px">Universe type</span>
+                      <select onChange="{{ b.onUniverse }}" style="width:100%;height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.35);color:var(--dark-fg-1);font:var(--t-body-m);outline:none">
+                        <sc-for list="{{ b.universeOptions }}" as="u" hint-placeholder-count="11">
+                          <option value="{{ u.id }}" selected="{{ u.selected }}">{{ u.label }}</option>
+                        </sc-for>
+                      </select>
+                    </label>
+                    <sc-if value="{{ b.needsInstrument }}" hint-placeholder-val="{{ false }}">
+                      <label style="display:block">
+                        <span style="display:block;font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-bottom:7px">Underlying (search)</span>
+                        <select onChange="{{ b.onInstrument }}" style="width:100%;height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.35);color:var(--dark-fg-1);font:var(--t-body-m)">
+                          <sc-for list="{{ b.instrumentOptions }}" as="i" hint-placeholder-count="6">
+                            <option value="{{ i.id }}" selected="{{ i.selected }}">{{ i.label }}</option>
+                          </sc-for>
+                        </select>
+                      </label>
+                    </sc-if>
+                    <sc-if value="{{ b.needsWatchlist }}" hint-placeholder-val="{{ false }}">
+                      <label style="display:block">
+                        <span style="display:block;font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-bottom:7px">Source watchlist</span>
+                        <select onChange="{{ b.onWatchlist }}" style="width:100%;height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.35);color:var(--dark-fg-1);font:var(--t-body-m)">
+                          <sc-for list="{{ b.watchlistOptions }}" as="w" hint-placeholder-count="3">
+                            <option value="{{ w.id }}" selected="{{ w.selected }}">{{ w.label }}</option>
+                          </sc-for>
+                        </select>
+                      </label>
+                    </sc-if>
+                    <sc-if value="{{ b.isDeriv }}" hint-placeholder-val="{{ false }}">
+                      <label style="display:block">
+                        <span style="display:block;font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-bottom:7px">Expiry bucket · relative</span>
+                        <select value="{{ b.expiry }}" onChange="{{ b.onExpiry }}" style="width:100%;height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.35);color:var(--dark-fg-1);font:var(--t-body-m)">
+                          <option value="near_week">Near week</option>
+                          <option value="next_week">Next week</option>
+                          <option value="monthly">Monthly</option>
+                          <option value="far_month">Far month</option>
+                        </select>
+                      </label>
+                    </sc-if>
+                  </div>
+
+                  <sc-if value="{{ b.isDeriv }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:14px;padding:14px;border-radius:10px;border:1px solid var(--dark-border);background:rgba(0,0,0,.25)">
+                      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
+                        <span style="font:var(--t-body-m);color:var(--dark-fg-1)">Strike band around ATM</span>
+                        <span style="font:var(--t-mono-l);color:rgb(120,201,255)">{{ b.strikeLabel }}</span>
+                        <span style="flex:1"></span>
+                        <span style="font:var(--t-body-s);color:var(--dark-fg-2)">{{ b.strikeCount }}</span>
+                      </div>
+                      <input type="range" min="1" max="20" value="{{ b.strike }}" onChange="{{ b.onStrike }}" style="width:100%;margin-top:12px;accent-color:rgb(0,120,206)">
+                      <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px">
+                        <span style="font:var(--t-body-s);color:var(--dark-fg-3)">Expiry re-resolves to whichever contract occupies the bucket at run start — never pinned to a date.</span>
+                        <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                          <span style="font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:4px 8px;border-radius:999px">Open §12.3 — default band width; “all strikes” opt-in</span>
+                        </sc-if>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px">
+                    <span style="font:var(--t-label-m);padding:5px 10px;border-radius:999px;background:rgba(0,120,206,.14);color:rgb(120,201,255)">{{ b.universeSizeLabel }}</span>
+                    <span style="font:var(--t-body-s);color:var(--dark-fg-2)">{{ b.universeNote }}</span>
+                    <sc-if value="{{ b.universeFlag }}" hint-placeholder-val="{{ false }}">
+                      <span style="font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:4px 8px;border-radius:999px">{{ b.universeFlagLabel }}</span>
+                    </sc-if>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ b.showConditions }}" hint-placeholder-val="{{ true }}">
+                <div style="border:1px solid var(--dark-border);border-radius:14px;background:rgba(255,255,255,.035);padding:18px">
+                  <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;margin-bottom:16px">
+                    <div style="flex:1;min-width:200px">
+                      <div style="font:var(--t-h6);margin-bottom:4px">Conditions</div>
+                      <div style="font:var(--t-body-s);color:var(--dark-fg-2)">Flat list, all combined with AND. No OR and no groups in v1 (§5.2).</div>
+                    </div>
+                    <button onClick="{{ b.openLib }}" style="height:36px;padding:0 14px;border-radius:999px;border:1px solid rgba(120,201,255,.35);background:rgba(0,120,206,.14);color:rgb(120,201,255);font:var(--t-body-m);cursor:pointer;display:inline-flex;align-items:center;gap:8px">
+                      <img src="icons/add.svg" alt="" style="width:14px;height:14px;filter:brightness(0) invert(1);opacity:.85">Add condition
+                    </button>
+                  </div>
+
+                  <sc-if value="{{ b.noConditions }}" hint-placeholder-val="{{ false }}">
+                    <div style="border:1px dashed var(--dark-border);border-radius:12px;padding:32px;text-align:center">
+                      <div style="font:var(--t-body-m);color:var(--dark-fg-1)">No conditions yet</div>
+                      <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:6px;max-width:400px;margin-left:auto;margin-right:auto;text-wrap:pretty">Every condition is a field, an operator and a value. Fields that don’t apply to this universe are rejected here, at build time (§10).</div>
+                      <button onClick="{{ b.openLib }}" style="margin-top:16px;height:36px;padding:0 16px;border-radius:999px;border:0;background:var(--nubra-blue-400);color:var(--fg-on-primary);font:var(--t-body-m);cursor:pointer">Browse condition library</button>
+                    </div>
+                  </sc-if>
+
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <sc-for list="{{ b.condRows }}" as="row" hint-placeholder-count="3">
+                      <div>
+                        <sc-if value="{{ row.showAnd }}" hint-placeholder-val="{{ false }}">
+                          <div style="display:flex;align-items:center;gap:10px;padding:4px 0 8px 10px">
+                            <span style="font:var(--t-label-s);letter-spacing:.12em;color:rgb(120,201,255);padding:3px 8px;border-radius:999px;background:rgba(0,120,206,.16)">AND</span>
+                            <span style="flex:1;height:1px;background:var(--dark-border)"></span>
+                          </div>
+                        </sc-if>
+                        <div style="border:1px solid var(--dark-border);border-radius:10px;background:rgba(0,0,0,.3);padding:12px">
+                          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+                            <img src="icons/drag-handle.svg" alt="" style="width:14px;height:14px;filter:brightness(0) invert(1);opacity:.35;cursor:grab">
+                            <div style="min-width:170px;flex:1 1 170px">
+                              <div style="font:var(--t-body-m);color:var(--dark-fg-1)">{{ row.label }}</div>
+                              <div style="font:var(--t-label-m);color:var(--dark-fg-3);margin-top:3px">{{ row.cat }}</div>
+                            </div>
+                            <select onChange="{{ row.onOp }}" style="height:36px;padding:0 10px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.4);color:var(--dark-fg-1);font:var(--t-body-m)">
+                              <sc-for list="{{ row.ops }}" as="o" hint-placeholder-count="4">
+                                <option value="{{ o.id }}" selected="{{ o.selected }}">{{ o.label }}</option>
+                              </sc-for>
+                            </select>
+                            <sc-if value="{{ row.isNum }}" hint-placeholder-val="{{ true }}">
+                              <div style="display:flex;align-items:center;gap:6px">
+                                <input value="{{ row.value }}" onChange="{{ row.onVal }}" style="width:92px;height:36px;padding:0 10px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.4);color:var(--dark-fg-1);font:var(--t-mono-l);text-align:right" style-focus="border-color:var(--nubra-blue-400);box-shadow:var(--elev-glow-blue)">
+                                <span style="font:var(--t-body-s);color:var(--dark-fg-3);width:26px">{{ row.unit }}</span>
+                              </div>
+                            </sc-if>
+                            <sc-if value="{{ row.isRange }}" hint-placeholder-val="{{ false }}">
+                              <div style="display:flex;align-items:center;gap:6px">
+                                <input value="{{ row.value }}" onChange="{{ row.onVal }}" style="width:76px;height:36px;padding:0 10px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.4);color:var(--dark-fg-1);font:var(--t-mono-l);text-align:right">
+                                <span style="font:var(--t-body-s);color:var(--dark-fg-3)">to</span>
+                                <input value="{{ row.value2 }}" onChange="{{ row.onVal2 }}" style="width:76px;height:36px;padding:0 10px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.4);color:var(--dark-fg-1);font:var(--t-mono-l);text-align:right">
+                              </div>
+                            </sc-if>
+                            <sc-if value="{{ row.isEnum }}" hint-placeholder-val="{{ false }}">
+                              <select onChange="{{ row.onVal }}" style="height:36px;padding:0 10px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.4);color:var(--dark-fg-1);font:var(--t-body-m)">
+                                <sc-for list="{{ row.enumOptions }}" as="v" hint-placeholder-count="3">
+                                  <option value="{{ v.id }}" selected="{{ v.selected }}">{{ v.label }}</option>
+                                </sc-for>
+                              </select>
+                            </sc-if>
+                            <button onClick="{{ row.onRemove }}" title="Remove condition" style="width:36px;height:36px;border-radius:999px;border:1px solid var(--dark-border);background:transparent;cursor:pointer;display:grid;place-items:center">
+                              <img src="icons/delete.svg" alt="" style="width:14px;height:14px;filter:brightness(0) invert(1);opacity:.5">
+                            </button>
+                          </div>
+                          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--dark-border)">
+                            <span style="font:var(--t-label-m);padding:4px 8px;border-radius:999px;background:rgba(245,245,255,.07);color:var(--dark-fg-2)">{{ row.sourceLabel }}</span>
+                            <span style="font:var(--t-label-m);padding:4px 8px;border-radius:999px;background:{{ row.preBg }};color:{{ row.preColor }}">{{ row.preLabel }}</span>
+                            <span style="flex:1"></span>
+                            <span style="font:var(--t-mono-m);color:var(--dark-fg-2)">{{ row.hits }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ b.showNearMiss }}" hint-placeholder-val="{{ true }}">
+                <div style="border:1px solid var(--dark-border);border-radius:14px;background:rgba(255,255,255,.035);padding:18px">
+                  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
+                    <div style="flex:1;min-width:200px">
+                      <div style="font:var(--t-h6);margin-bottom:4px">Near-miss bucket</div>
+                      <div style="font:var(--t-body-s);color:var(--dark-fg-2)">Instruments that satisfy at least this share of conditions without fully matching (§5.7).</div>
+                    </div>
+                    <button onClick="{{ b.onToggleThreshold }}" title="Toggle near-miss bucket" style="width:52px;height:28px;border-radius:999px;border:1px solid var(--dark-border);background:{{ b.thBg }};cursor:pointer;position:relative;padding:0">
+                      <span style="position:absolute;top:2px;left:{{ b.thKnobLeft }};width:22px;height:22px;border-radius:999px;background:var(--dark-fg-1);transition:left 120ms var(--ease-out)"></span>
+                    </button>
+                  </div>
+                  <sc-if value="{{ b.thresholdOn }}" hint-placeholder-val="{{ true }}">
+                    <div style="margin-top:16px">
+                      <div style="display:flex;align-items:baseline;gap:10px">
+                        <span style="font-family:var(--font-display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;color:#F2C78A">{{ b.thresholdLabel }}</span>
+                        <span style="font:var(--t-body-s);color:var(--dark-fg-2)">{{ b.thresholdHint }}</span>
+                      </div>
+                      <input type="range" min="40" max="95" step="5" value="{{ b.threshold }}" onChange="{{ b.onThreshold }}" style="width:100%;margin-top:10px;accent-color:rgb(177,102,16)">
+                      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+                        <span style="font:var(--t-body-s);color:var(--dark-fg-2)">Every instrument is evaluated against every condition — no short-circuit — so match % can be computed (§5.7, §11).</span>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                    <div style="margin-top:12px;font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:8px 10px;border-radius:8px">Open §12.10 — is the threshold mandatory per setup or an optional toggle, and what default ships? Shown here as optional, default 70%.</div>
+                  </sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ b.showSchedule }}" hint-placeholder-val="{{ true }}">
+                <div style="border:1px solid var(--dark-border);border-radius:14px;background:rgba(255,255,255,.035);padding:18px">
+                  <div style="font:var(--t-h6);margin-bottom:4px">Schedule</div>
+                  <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-bottom:16px">Each run re-resolves the universe, then evaluates every condition.</div>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+                    <label style="display:block">
+                      <span style="display:block;font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-bottom:7px">Frequency</span>
+                      <select value="{{ b.freq }}" onChange="{{ b.onFreq }}" style="width:100%;height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.35);color:var(--dark-fg-1);font:var(--t-body-m)">
+                        <option value="every_15">Every 15 minutes</option>
+                        <option value="hourly">Hourly</option>
+                        <option value="open">At market open</option>
+                        <option value="close">At market close</option>
+                        <option value="daily_eod">Daily, end of day</option>
+                      </select>
+                    </label>
+                    <label style="display:block">
+                      <span style="display:block;font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-bottom:7px">Session window</span>
+                      <select value="{{ b.window }}" onChange="{{ b.onWindow }}" style="width:100%;height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.35);color:var(--dark-fg-1);font:var(--t-body-m)">
+                        <option value="pre_open">Pre-open (09:00–09:15)</option>
+                        <option value="market">Market hours</option>
+                        <option value="post_close">Post close</option>
+                      </select>
+                    </label>
+                  </div>
+                  <sc-if value="{{ b.preOpenClash }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;gap:12px;align-items:flex-start;margin-top:14px;padding:13px 14px;border-radius:10px;background:rgba(241,66,66,.10);border:1px solid rgba(241,66,66,.35)">
+                      <span style="color:var(--down-500)">✕</span>
+                      <div>
+                        <div style="font:var(--t-body-m);color:#FF9E9E">Runs in the pre-open window will be blocked</div>
+                        <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:3px">{{ b.preOpenClashDetail }}</div>
+                      </div>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                    <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px">
+                      <span style="font:var(--t-label-m);color:rgb(120,201,255);border:1px dashed rgba(120,201,255,.5);padding:6px 10px;border-radius:8px">Deferred §12.1 — frequency options &amp; tier limits pending costing; this list is a placeholder</span>
+                      <span style="font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:6px 10px;border-radius:8px">Open §12.5 — per-condition pre_open_valid values need live confirmation</span>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ b.showOutput }}" hint-placeholder-val="{{ true }}">
+                <div style="border:1px solid var(--dark-border);border-radius:14px;background:rgba(255,255,255,.035);padding:18px">
+                  <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
+                    <div style="flex:1;min-width:200px">
+                      <div style="font:var(--t-h6);margin-bottom:4px">Watchlist binding</div>
+                      <div style="font:var(--t-body-s);color:var(--dark-fg-2)">Strictly 1:1. Overwritten with full matches on every run; stays editable in between (§5.5).</div>
+                    </div>
+                    <button onClick="{{ b.onToggleBind }}" title="Toggle watchlist binding" style="width:52px;height:28px;border-radius:999px;border:1px solid var(--dark-border);background:{{ b.bindBg }};cursor:pointer;position:relative;padding:0">
+                      <span style="position:absolute;top:2px;left:{{ b.bindKnobLeft }};width:22px;height:22px;border-radius:999px;background:var(--dark-fg-1);transition:left 120ms var(--ease-out)"></span>
+                    </button>
+                  </div>
+                  <sc-if value="{{ b.bindOn }}" hint-placeholder-val="{{ false }}">
+                    <div style="margin-top:16px">
+                      <label style="display:block;max-width:340px">
+                        <span style="display:block;font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-bottom:7px">Target watchlist</span>
+                        <select onChange="{{ b.onBindTarget }}" style="width:100%;height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.35);color:var(--dark-fg-1);font:var(--t-body-m)">
+                          <sc-for list="{{ b.bindOptions }}" as="w" hint-placeholder-count="3">
+                            <option value="{{ w.id }}" selected="{{ w.selected }}">{{ w.label }}</option>
+                          </sc-for>
+                        </select>
+                      </label>
+                      <div style="margin-top:12px;font:var(--t-body-s);color:var(--dark-fg-2);text-wrap:pretty">Near-miss instruments never write to a watchlist. Inputs are snapshotted at run start and output is written at run end, so a setup can safely read and write the same list (§5.3).</div>
+                      <sc-if value="{{ b.selfNarrow }}" hint-placeholder-val="{{ false }}">
+                        <div style="margin-top:12px;padding:13px 14px;border-radius:10px;background:rgba(177,102,16,.12);border:1px solid rgba(177,102,16,.45);font:var(--t-body-s);color:#F2C78A">This watchlist is both the universe and the output. The list will narrow run over run — possibly to empty. That is intended behaviour; there is no auto-reseed (§5.3).</div>
+                      </sc-if>
+                      <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                        <div style="margin-top:12px;font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:8px 10px;border-radius:8px">Open §12.7 — what happens if the bound watchlist is deleted while the setup is active (pause vs. skip the write)?</div>
+                      </sc-if>
+                    </div>
+                  </sc-if>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ b.isWizard }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:14px;border:1px solid var(--dark-border);border-radius:12px;background:rgba(8,8,8,.35)">
+                  <button onClick="{{ b.back }}" style="height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--dark-border);background:transparent;color:var(--dark-fg-2);font:var(--t-body-m);cursor:pointer">Back</button>
+                  <span style="font:var(--t-body-s);color:var(--dark-fg-3)">{{ b.stepHint }}</span>
+                  <span style="flex:1"></span>
+                  <button onClick="{{ b.next }}" style="height:40px;padding:0 20px;border-radius:999px;border:0;background:var(--nubra-blue-400);color:var(--fg-on-primary);font:var(--t-body-m);cursor:pointer">{{ b.nextLabel }}</button>
+                </div>
+              </sc-if>
+            </div>
+
+            <div style="flex:1 1 300px;min-width:280px;display:flex;flex-direction:column;gap:16px;position:sticky;top:0">
+              <div style="border:1px solid var(--dark-border);border-radius:14px;background:rgba(8,8,8,.5);padding:18px">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+                  <img src="icons/ai.svg" alt="" style="width:16px;height:16px;filter:brightness(0) invert(1);opacity:.7">
+                  <span style="font:var(--t-h6)">Run preview</span>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ b.preview }}" as="p" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:baseline;gap:10px">
+                      <span style="flex:1;font:var(--t-body-m);color:var(--dark-fg-2)">{{ p.label }}</span>
+                      <span style="font-family:var(--font-display);font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;color:{{ p.color }}">{{ p.value }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--dark-border);font:var(--t-body-s);color:var(--dark-fg-3);text-wrap:pretty">{{ b.costNote }}</div>
+              </div>
+
+              <div style="border:1px solid var(--dark-border);border-radius:14px;background:rgba(255,255,255,.03);padding:18px">
+                <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-bottom:12px">Before you save</div>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <sc-for list="{{ b.checks }}" as="c" hint-placeholder-count="3">
+                    <div style="display:flex;gap:10px;align-items:flex-start">
+                      <span style="color:{{ c.color }};font-size:12px;line-height:1.5">{{ c.icon }}</span>
+                      <span style="flex:1;font:var(--t-body-s);color:var(--dark-fg-2)">{{ c.text }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <button onClick="{{ b.save }}" style="width:100%;height:44px;margin-top:16px;border-radius:999px;border:0;background:var(--nubra-blue-400);color:var(--fg-on-primary);font:var(--t-body-l);cursor:pointer">Save setup</button>
+                <button onClick="{{ b.saveDraft }}" style="width:100%;height:36px;margin-top:8px;border-radius:999px;border:1px solid var(--dark-border);background:transparent;color:var(--dark-fg-2);font:var(--t-body-m);cursor:pointer">Save as draft</button>
+              </div>
+
+              <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                <div style="border:1px dashed rgba(177,102,16,.5);border-radius:14px;background:rgba(177,102,16,.07);padding:16px">
+                  <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:#E8B268;margin-bottom:10px">Unresolved in the PRD</div>
+                  <div style="display:flex;flex-direction:column;gap:8px">
+                    <sc-for list="{{ b.openQuestions }}" as="q" hint-placeholder-count="5">
+                      <div style="display:flex;gap:8px;align-items:flex-start">
+                        <span style="font:var(--t-mono-m);color:#E8B268;flex-shrink:0">{{ q.ref }}</span>
+                        <span style="flex:1;font:var(--t-body-s);color:var(--dark-fg-2)">{{ q.text }}</span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isOverlap }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Overlap analysis" style="padding:20px 28px 48px;animation:nbFade 200ms var(--ease-out)">
+          <button onClick="{{ goSetups }}" style="border:0;background:transparent;color:var(--dark-fg-2);font:var(--t-body-m);cursor:pointer;padding:0;margin-bottom:14px">← My Setups</button>
+          <div style="font:var(--t-h3);letter-spacing:-.01em">Overlap analysis</div>
+          <div style="font:var(--t-body-m);color:var(--dark-fg-2);margin-top:6px;margin-bottom:20px;max-width:640px;text-wrap:pretty">Compares the latest full-match lists of two of your setups. Computed on demand — not scheduled, not persisted (§5.8).</div>
+
+          <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:20px">
+            <label style="flex:1 1 240px;min-width:220px">
+              <span style="display:block;font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-bottom:7px">Setup A</span>
+              <select onChange="{{ o.onA }}" style="width:100%;height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.35);color:var(--dark-fg-1);font:var(--t-body-m)">
+                <sc-for list="{{ o.optionsA }}" as="s" hint-placeholder-count="3">
+                  <option value="{{ s.id }}" selected="{{ s.selected }}">{{ s.label }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <label style="flex:1 1 240px;min-width:220px">
+              <span style="display:block;font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3);margin-bottom:7px">Setup B</span>
+              <select onChange="{{ o.onB }}" style="width:100%;height:44px;padding:0 12px;border-radius:8px;border:1px solid var(--dark-border);background:rgba(0,0,0,.35);color:var(--dark-fg-1);font:var(--t-body-m)">
+                <sc-for list="{{ o.optionsB }}" as="s" hint-placeholder-count="3">
+                  <option value="{{ s.id }}" selected="{{ s.selected }}">{{ s.label }}</option>
+                </sc-for>
+              </select>
+            </label>
+            <button onClick="{{ o.run }}" style="height:44px;padding:0 20px;border-radius:999px;border:0;background:var(--nubra-blue-400);color:var(--fg-on-primary);font:var(--t-body-m);cursor:pointer">Compare</button>
+          </div>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:16px">
+            <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.03);padding:16px">
+              <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3)">Only in A</div>
+              <div style="font-family:var(--font-display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:8px">{{ o.onlyA }}</div>
+              <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:4px">{{ o.aName }}</div>
+              <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top:10px;font:var(--t-label-m);color:#E8B268">Open §12.12 — should exclusives render at all?</div>
+              </sc-if>
+            </div>
+            <div style="border:1px solid rgba(120,201,255,.45);border-radius:12px;background:rgba(0,120,206,.14);padding:16px">
+              <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:rgb(120,201,255)">In both</div>
+              <div style="font-family:var(--font-display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:8px;color:rgb(223,240,255)">{{ o.both }}</div>
+              <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:4px">Intersection of latest full matches</div>
+            </div>
+            <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.03);padding:16px">
+              <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3)">Only in B</div>
+              <div style="font-family:var(--font-display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:8px">{{ o.onlyB }}</div>
+              <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:4px">{{ o.bName }}</div>
+              <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                <div style="margin-top:10px;font:var(--t-label-m);color:#E8B268">Open §12.13 — two setups only, or N-way?</div>
+              </sc-if>
+            </div>
+          </div>
+
+          <sc-if value="{{ o.hasResults }}" hint-placeholder-val="{{ true }}">
+            <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.03);overflow:hidden">
+              <div style="display:grid;grid-template-columns:minmax(150px,1.2fr) 110px 110px minmax(180px,1.4fr);gap:12px;padding:10px 16px;background:rgba(8,8,8,.45);font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3)">
+                <div>Instrument</div><div style="text-align:right">LTP</div><div style="text-align:right">Chg %</div><div>Matched in</div>
+              </div>
+              <sc-for list="{{ o.rows }}" as="r" hint-placeholder-count="4">
+                <div style="display:grid;grid-template-columns:minmax(150px,1.2fr) 110px 110px minmax(180px,1.4fr);gap:12px;padding:12px 16px;border-top:1px solid var(--dark-border);align-items:center">
+                  <div>
+                    <div style="font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:.02em">{{ r.sym }}</div>
+                    <div style="font:var(--t-body-s);color:var(--dark-fg-3);margin-top:2px">{{ r.name }}</div>
+                  </div>
+                  <div style="text-align:right;font:var(--t-mono-l);font-variant-numeric:tabular-nums">{{ r.ltp }}</div>
+                  <div style="text-align:right;font:var(--t-mono-l);font-variant-numeric:tabular-nums;color:{{ r.chgColor }}">{{ r.chg }}</div>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap">
+                    <span style="font:var(--t-label-m);padding:4px 8px;border-radius:999px;background:rgba(0,120,206,.16);color:rgb(120,201,255)">A · {{ r.aCount }}</span>
+                    <span style="font:var(--t-label-m);padding:4px 8px;border-radius:999px;background:rgba(0,120,206,.16);color:rgb(120,201,255)">B · {{ r.bCount }}</span>
+                  </div>
+                </div>
+              </sc-for>
+              <div style="padding:12px 16px;border-top:1px solid var(--dark-border);display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+                <span style="font:var(--t-body-s);color:var(--dark-fg-3)">Full matches only — near-miss instruments are excluded from this comparison.</span>
+                <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                  <span style="font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:4px 8px;border-radius:999px">Open §12.11 — include near-miss?</span>
+                </sc-if>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ o.zero }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.03);padding:48px 24px;text-align:center">
+              <div style="font:var(--t-h6);color:var(--dark-fg-1)">No instruments in common</div>
+              <div style="font:var(--t-body-m);color:var(--dark-fg-2);margin-top:8px;max-width:440px;margin-left:auto;margin-right:auto;text-wrap:pretty">{{ o.zeroText }} Disjoint universes are not an error — the comparison still runs (§10).</div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <sc-if value="{{ lib.open }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;background:rgba(3,6,10,.72);display:grid;place-items:center;padding:24px;z-index:40">
+      <div style="width:100%;max-width:920px;max-height:86vh;display:flex;flex-direction:column;border:1px solid rgba(245,245,255,.14);border-radius:16px;background:rgb(12,16,22);box-shadow:0 24px 64px rgba(0,0,0,.6);overflow:hidden">
+        <div style="display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--dark-border)">
+          <div style="flex:1;min-width:0">
+            <div style="font:var(--t-h6)">Condition library</div>
+            <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:3px">{{ lib.subtitle }}</div>
+          </div>
+          <button onClick="{{ lib.close }}" style="width:32px;height:32px;border-radius:999px;border:1px solid var(--dark-border);background:transparent;cursor:pointer;display:grid;place-items:center">
+            <img src="icons/close.svg" alt="Close" style="width:12px;height:12px;filter:brightness(0) invert(1);opacity:.6">
+          </button>
+        </div>
+        <div style="padding:14px 18px;border-bottom:1px solid var(--dark-border)">
+          <input value="{{ lib.query }}" onChange="{{ lib.onQuery }}" placeholder="Search 180+ fields — rsi, pcr, promoter, roce…" style="width:100%;height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--dark-border);background:rgba(0,0,0,.4);color:var(--dark-fg-1);font:var(--t-body-m);outline:none" style-focus="border-color:var(--nubra-blue-400);box-shadow:var(--elev-glow-blue)">
+        </div>
+        <div style="flex:1;min-height:0;display:flex;overflow:hidden">
+          <div style="flex:0 0 220px;min-height:0;border-right:1px solid var(--dark-border);padding:10px;overflow:auto;display:flex;flex-direction:column;gap:2px">
+            <sc-for list="{{ lib.cats }}" as="c" hint-placeholder-count="8">
+              <button onClick="{{ c.onClick }}" style="text-align:left;border:0;cursor:pointer;padding:9px 11px;border-radius:8px;background:{{ c.bg }};color:{{ c.fg }};font:var(--t-body-m);display:flex;align-items:center;gap:8px">
+                <span style="flex:1">{{ c.name }}</span>
+                <span style="font:var(--t-mono-m);opacity:.6">{{ c.count }}</span>
+              </button>
+            </sc-for>
+            <div style="margin-top:10px;padding:10px;border-radius:8px;background:rgba(241,66,66,.08);border:1px solid rgba(241,66,66,.2)">
+              <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.06em;color:var(--down-500);margin-bottom:6px">Confirmed unavailable</div>
+              <div style="font:var(--t-body-s);color:var(--dark-fg-3);text-wrap:pretty">Futures OI · rollover % · basis · delivery % · beta · analyst ratings · news &amp; sentiment · breadth · sector constituents</div>
+            </div>
+          </div>
+          <div style="flex:1 1 auto;min-width:0;min-height:0;overflow:auto;padding:10px;display:flex;flex-direction:column;gap:4px">
+            <sc-for list="{{ lib.fields }}" as="f" hint-placeholder-count="8">
+              <button onClick="{{ f.onAdd }}" style="text-align:left;width:100%;border:1px solid var(--dark-border);border-radius:10px;background:{{ f.bg }};cursor:{{ f.cursor }};padding:11px 12px;display:flex;align-items:center;gap:10px;opacity:{{ f.opacity }}">
+                <div style="flex:1;min-width:0">
+                  <div style="font:var(--t-body-m);color:var(--dark-fg-1)">{{ f.label }}</div>
+                  <div style="font:var(--t-body-s);color:var(--dark-fg-3);margin-top:3px">{{ f.note }}</div>
+                </div>
+                <span style="font:var(--t-label-m);padding:4px 8px;border-radius:999px;background:{{ f.tagBg }};color:{{ f.tagFg }};flex-shrink:0">{{ f.tag }}</span>
+              </button>
+            </sc-for>
+            <sc-if value="{{ lib.noResults }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:40px 16px;text-align:center;font:var(--t-body-m);color:var(--dark-fg-2)">No field matches “{{ lib.query }}”.</div>
+            </sc-if>
+          </div>
+        </div>
+        <div style="padding:12px 18px;border-top:1px solid var(--dark-border);display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <span style="font:var(--t-body-s);color:var(--dark-fg-3)">{{ lib.footer }}</span>
+          <span style="flex:1"></span>
+          <button onClick="{{ lib.close }}" style="height:36px;padding:0 16px;border-radius:999px;border:0;background:var(--nubra-blue-400);color:var(--fg-on-primary);font:var(--t-body-m);cursor:pointer">Done</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;right:24px;bottom:24px;z-index:60;display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;background:rgb(12,16,22);border:1px solid rgba(124,207,94,.4);box-shadow:0 16px 40px rgba(0,0,0,.6);animation:nbFade 180ms var(--ease-out)">
+      <span style="width:8px;height:8px;border-radius:999px;background:var(--up-300)"></span>
+      <span style="font:var(--t-body-m);color:var(--dark-fg-1)">{{ toast }}</span>
+    </div>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showOpenFlags&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Prototype&quot;},&quot;builderLayout&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;split&quot;,&quot;wizard&quot;],&quot;default&quot;:&quot;split&quot;,&quot;tsType&quot;:&quot;\&quot;split\&quot; | \&quot;wizard\&quot;&quot;,&quot;section&quot;:&quot;Prototype&quot;}}">
+class Component extends DCLogic {
+  LIB = [
+    { cat: "Price & volume", kind: "equity", fields: [
+      { id: "day_chg", label: "Day change %", unit: "%", pre: true },
+      { id: "gap_pct", label: "Gap %", unit: "%", pre: true },
+      { id: "ltp_prev", label: "LTP vs previous close", unit: "%", pre: false },
+      { id: "ltp_vwap", label: "LTP vs VWAP", unit: "%", pre: false },
+      { id: "vol_rel", label: "Volume vs 20d average", unit: "×", pre: false },
+      { id: "range_pct", label: "Day range %", unit: "%", pre: true },
+      { id: "l1_bid", label: "Best bid size (L1)", unit: "qty", pre: false, note: "Order-book depth, 20 levels" },
+    ] },
+    { cat: "Technicals", kind: "equity", fields: [
+      { id: "rsi_14", label: "RSI (14)", pre: true },
+      { id: "ema_cross", label: "EMA 20 vs EMA 50", pre: true, type: "enum", values: ["Bullish", "Bearish"], note: "16 MA variants, EMA/SMA 5→200" },
+      { id: "macd_hist", label: "MACD histogram", pre: true },
+      { id: "adx_14", label: "ADX (14)", pre: true },
+      { id: "bb_pctb", label: "Bollinger %B", pre: true },
+      { id: "atr_14", label: "ATR (14)", pre: true },
+      { id: "stoch_rsi", label: "Stochastic RSI", pre: true },
+      { id: "qvm", label: "QVM composite score", pre: true, note: "Quality · Value · Momentum factor scores" },
+      { id: "talib", label: "TA-Lib function…", pre: true, note: "~150 functions, computed on demand" },
+    ] },
+    { cat: "Fundamentals", kind: "equity", fields: [
+      { id: "pe_ratio", label: "P/E", pre: true },
+      { id: "pb_ratio", label: "P/B", pre: true },
+      { id: "roe", label: "ROE %", unit: "%", pre: true },
+      { id: "roce", label: "ROCE %", unit: "%", pre: true },
+      { id: "eps_g", label: "EPS growth %", unit: "%", pre: true },
+      { id: "de", label: "Debt / equity", pre: true },
+      { id: "div_y", label: "Dividend yield %", unit: "%", pre: true },
+      { id: "mcap", label: "Market cap", unit: "₹cr", pre: true },
+      { id: "int_cov", label: "Interest coverage", pre: true },
+    ] },
+    { cat: "Shareholding", kind: "equity", fields: [
+      { id: "promoter", label: "Promoter %", unit: "%", pre: true },
+      { id: "fii", label: "FII %", unit: "%", pre: true },
+      { id: "mf", label: "Mutual fund %", unit: "%", pre: true },
+      { id: "promoter_chg", label: "Promoter % change (QoQ)", unit: "%", pre: true },
+    ] },
+    { cat: "Instrument metadata", kind: "any", fields: [
+      { id: "series", label: "Series", pre: true, type: "enum", values: ["EQ", "BE"], note: "Excludes surveillance / T2T" },
+      { id: "lot_size", label: "Lot size", pre: true },
+      { id: "freeze_qty", label: "Freeze quantity", pre: true },
+      { id: "is_etf", label: "Is ETF", pre: true, type: "enum", values: ["True", "False"] },
+      { id: "has_deriv", label: "Has derivatives", pre: true, type: "enum", values: ["OPT", "FUT", "STOCK"] },
+    ] },
+    { cat: "Options — per expiry", kind: "deriv", fields: [
+      { id: "pcr", label: "PCR (put OI ÷ call OI)", pre: false },
+      { id: "atm_iv", label: "ATM IV %", unit: "%", pre: false },
+      { id: "iv_skew", label: "IV skew slope", pre: false, note: "Put-wing vs call-wing IV" },
+      { id: "call_oi_chg", label: "Call OI change %", unit: "%", pre: false },
+      { id: "put_oi_chg", label: "Put OI change %", unit: "%", pre: false },
+      { id: "oi_wall", label: "OI wall distance from spot", unit: "%", pre: false, note: "Concentration strike + side label" },
+      { id: "max_pain", label: "Max pain distance from spot", unit: "%", pre: false },
+      { id: "c_delta", label: "Contract delta", pre: false, note: "Filterable by CE/PE, strike band" },
+      { id: "c_theta", label: "Contract theta", pre: false },
+      { id: "c_iv", label: "Contract IV %", unit: "%", pre: false },
+    ] },
+    { cat: "Options — cross expiry", kind: "deriv", fields: [
+      { id: "iv_term", label: "ATM IV term structure", pre: false, type: "enum", values: ["Rising", "Falling"] },
+      { id: "pcr_xexp", label: "PCR across expiries", pre: false },
+      { id: "vol_xexp", label: "Call volume across expiries", pre: false },
+    ] },
+    { cat: "Futures & trend", kind: "deriv", fields: [
+      { id: "fut_chg", label: "Futures price change %", unit: "%", pre: false },
+      { id: "buildup", label: "Buildup classification", pre: false, type: "enum", values: ["Long buildup", "Short buildup", "Short covering", "Long unwinding"] },
+      { id: "iv_rank", label: "IV percentile (per strike)", unit: "%", pre: false },
+      { id: "pcr_roc", label: "PCR rate-of-change", pre: false },
+      { id: "greeks_trend", label: "Rising greeks trend", pre: false, type: "enum", values: ["Delta up", "Vega up"] },
+    ] },
+  ];
+
+  UNIVERSES = [
+    { id: "exch", label: "Whole exchange universe", kind: "equity", size: 2143, note: "All NSE-listed equities", flag: "Open §12.2 — size cap, T2T & surveillance exclusions" },
+    { id: "n50", label: "Nifty 50", kind: "equity", size: 50, note: "Static index membership" },
+    { id: "n100", label: "Nifty 100", kind: "equity", size: 100, note: "Static index membership" },
+    { id: "n500", label: "Nifty 500", kind: "equity", size: 500, note: "Static index membership" },
+    { id: "fno", label: "All F&O-eligible stocks", kind: "equity", size: 187, note: "Equities with a derivatives segment" },
+    { id: "fut_one", label: "Futures — single underlying", kind: "deriv", size: 3, param: "instrument", note: "One underlying's futures contracts" },
+    { id: "fut_all", label: "Futures — all F&O underlyings", kind: "deriv", size: 187, note: "Near-month future of every F&O underlying" },
+    { id: "oc_one", label: "Option chain — single underlying, single expiry", kind: "deriv", size: 0, param: "instrument", strikes: true, note: "One expiry's chain, ATM-band bounded", flag: "Open §12.3 — default band width; “all strikes” opt-in" },
+    { id: "oc_all", label: "Option chain — single underlying, all expiries", kind: "deriv", size: 0, param: "instrument", strikes: true, multi: 4, note: "Near-ATM band across expiries", flag: "Open §12.3 — default band width; “all strikes” opt-in" },
+    { id: "idx_deriv", label: "Index derivatives", kind: "deriv", size: 140, param: "instrument", note: "Index futures & options" },
+    { id: "wl", label: "A specific watchlist", kind: "equity", size: 24, param: "watchlist", note: "Resolved to the list's contents at run start" },
+    { id: "hold", label: "Portfolio / holdings", kind: "equity", size: 17, note: "Your current holdings at run start" },
+  ];
+
+  WATCHLISTS = ["Swing candidates", "F&O focus", "Long-term core"];
+  INSTRUMENTS = ["NIFTY", "BANKNIFTY", "RELIANCE", "HDFCBANK", "TATAMOTORS", "INFY"];
+
+  OPS_NUM = [
+    { id: "gt", label: "is greater than" }, { id: "gte", label: "is at least" },
+    { id: "lt", label: "is less than" }, { id: "lte", label: "is at most" },
+    { id: "eq", label: "equals" }, { id: "between", label: "is between" },
+    { id: "xup", label: "crosses above" }, { id: "xdn", label: "crosses below" },
+    { id: "pct", label: "changes % over" },
+  ];
+  OPS_ENUM = [{ id: "is", label: "is" }, { id: "isnot", label: "is not" }];
+
+  OPSYM = { gt: ">", gte: "≥", lt: "<", lte: "≤", eq: "=", between: "between", xup: "crosses ↑", xdn: "crosses ↓", pct: "Δ% over", is: "is", isnot: "is not" };
+
+  SETUPS = [
+    {
+      id: "s1", name: "Oversold F&O longs", status: "Active", universe: "fno", freq: "close", window: "pre_open",
+      threshold: 70, bind: "Swing candidates", lastRun: "Today 15:35",
+      conds: [
+        { f: "rsi_14", op: "lt", v: "35" },
+        { f: "day_chg", op: "lte", v: "-2" },
+        { f: "vol_rel", op: "gt", v: "1.5" },
+        { f: "pe_ratio", op: "lt", v: "25" },
+        { f: "promoter", op: "gte", v: "50" },
+      ],
+      results: [
+        ["TATAMOTORS", "Tata Motors", 742.15, -3.42, []],
+        ["HINDALCO", "Hindalco Industries", 618.9, -2.88, []],
+        ["SBIN", "State Bank of India", 812.4, -2.11, []],
+        ["COALINDIA", "Coal India", 398.65, -2.64, []],
+        ["BPCL", "Bharat Petroleum", 301.2, -3.05, []],
+        ["ONGC", "Oil & Natural Gas", 244.75, -2.42, []],
+        ["IOC", "Indian Oil", 138.6, -2.19, []],
+        ["NTPC", "NTPC", 351.05, -2.07, []],
+        ["GAIL", "GAIL India", 186.4, -2.95, []],
+        ["TATASTEEL", "Tata Steel", 154.85, -3.11, []],
+        ["POWERGRID", "Power Grid Corp", 289.3, -2.24, []],
+        ["AXISBANK", "Axis Bank", 1064.5, -2.33, []],
+        ["ICICIBANK", "ICICI Bank", 1248.2, -1.62, [1]],
+        ["WIPRO", "Wipro", 276.4, -2.51, [3]],
+        ["ADANIPORTS", "Adani Ports", 1342.8, -2.18, [4]],
+        ["MARUTI", "Maruti Suzuki", 11840.0, -2.44, [3]],
+        ["JSWSTEEL", "JSW Steel", 934.6, -2.72, [2]],
+        ["LT", "Larsen & Toubro", 3502.1, -2.06, [3]],
+        ["BAJFINANCE", "Bajaj Finance", 6712.5, -2.61, [3, 4]],
+        ["DRREDDY", "Dr Reddy's Labs", 1204.9, -2.15, [0]],
+        ["HEROMOTOCO", "Hero MotoCorp", 4386.3, -2.37, [2]],
+      ],
+      diff: { added: ["GAIL", "POWERGRID", "IOC"], dropped: ["TECHM", "CIPLA"] },
+    },
+    {
+      id: "s2", name: "NIFTY weekly IV crush", status: "Active", universe: "oc_one", instrument: "NIFTY",
+      expiry: "near_week", strike: 8, freq: "every_15", window: "market", threshold: 75, bind: null, lastRun: "Today 14:00",
+      conds: [
+        { f: "atm_iv", op: "gt", v: "18" },
+        { f: "pcr", op: "lt", v: "0.8" },
+        { f: "call_oi_chg", op: "gt", v: "25" },
+        { f: "oi_wall", op: "lte", v: "2" },
+      ],
+      results: [
+        ["NIFTY 24500 CE", "Near week · 24 Sep", 118.45, 8.2, []],
+        ["NIFTY 24550 CE", "Near week · 24 Sep", 92.1, 9.4, []],
+        ["NIFTY 24600 CE", "Near week · 24 Sep", 68.75, 11.6, []],
+        ["NIFTY 24650 CE", "Near week · 24 Sep", 49.3, 12.1, []],
+        ["NIFTY 24700 CE", "Near week · 24 Sep", 34.85, 14.8, []],
+        ["NIFTY 24400 PE", "Near week · 24 Sep", 74.2, -6.4, []],
+        ["NIFTY 24350 PE", "Near week · 24 Sep", 58.9, -7.1, []],
+        ["NIFTY 24300 PE", "Near week · 24 Sep", 44.15, -8.3, []],
+        ["NIFTY 24750 CE", "Near week · 24 Sep", 24.6, 16.2, []],
+        ["NIFTY 24250 PE", "Near week · 24 Sep", 33.4, -9.2, []],
+        ["NIFTY 24800 CE", "Near week · 24 Sep", 17.95, 18.4, [3]],
+        ["NIFTY 24200 PE", "Near week · 24 Sep", 25.1, -10.6, [3]],
+        ["NIFTY 24850 CE", "Near week · 24 Sep", 12.3, 21.5, [1]],
+        ["NIFTY 24150 PE", "Near week · 24 Sep", 19.85, -11.2, [2]],
+      ],
+      diff: { added: ["NIFTY 24750 CE", "NIFTY 24250 PE"], dropped: ["NIFTY 24450 CE"] },
+    },
+    {
+      id: "s3", name: "Quality value core", status: "Paused", universe: "n500", freq: "daily_eod", window: "post_close",
+      threshold: 60, bind: "Long-term core", lastRun: "Fri 18:10",
+      conds: [
+        { f: "roce", op: "gt", v: "18" },
+        { f: "de", op: "lt", v: "0.5" },
+        { f: "pe_ratio", op: "lt", v: "30" },
+        { f: "eps_g", op: "gt", v: "12" },
+        { f: "promoter", op: "gte", v: "45" },
+      ],
+      results: [
+        ["SBIN", "State Bank of India", 812.4, -2.11, []],
+        ["COALINDIA", "Coal India", 398.65, -2.64, []],
+        ["NTPC", "NTPC", 351.05, -2.07, []],
+        ["IOC", "Indian Oil", 138.6, -2.19, []],
+        ["TCS", "Tata Consultancy", 4128.5, 0.84, []],
+        ["INFY", "Infosys", 1876.2, 1.12, []],
+        ["HINDUNILVR", "Hindustan Unilever", 2404.0, 0.36, []],
+        ["ASIANPAINT", "Asian Paints", 2914.7, -0.58, []],
+        ["NESTLEIND", "Nestlé India", 2246.3, 0.22, [1]],
+        ["TITAN", "Titan Company", 3388.9, 0.94, [2]],
+        ["PIDILITIND", "Pidilite Industries", 2972.4, -0.41, [2]],
+        ["DABUR", "Dabur India", 518.75, 0.18, [3]],
+        ["BRITANNIA", "Britannia Industries", 5642.1, 0.62, [2, 3]],
+      ],
+      diff: { added: ["ASIANPAINT"], dropped: ["HAVELLS", "MARICO"] },
+    },
+  ];
+
+  STARTERS = [
+    { name: "Oversold, fundamentally sound", desc: "RSI · day change · P/E · promoter holding" },
+    { name: "Weekly IV crush", desc: "ATM IV · PCR · call OI change on the near week" },
+    { name: "Long buildup in futures", desc: "Buildup class · futures change % · IV percentile" },
+  ];
+
+  state = {
+    screen: "setups", empty: false, setupId: "s1", tab: "matches", openRow: null,
+    variant: null, step: 0, lib: false, libCat: "Technicals", libQuery: "",
+    ovA: "s1", ovB: "s3", toast: null, flags: null,
+    b: null,
+  };
+
+  componentDidMount() { this.setState({ b: this.blank(true) }); }
+
+  blank(prefill) {
+    return prefill
+      ? { name: "Oversold F&O longs", universe: "fno", instrument: "NIFTY", watchlist: "Swing candidates", expiry: "near_week", strike: 5,
+          conds: [{ f: "rsi_14", op: "lt", v: "35", v2: "" }, { f: "day_chg", op: "lte", v: "-2", v2: "" }, { f: "vol_rel", op: "gt", v: "1.5", v2: "" }],
+          thresholdOn: true, threshold: 70, freq: "close", window: "market", bindOn: true, bindTarget: "Swing candidates" }
+      : { name: "", universe: "n500", instrument: "NIFTY", watchlist: "Swing candidates", expiry: "near_week", strike: 5,
+          conds: [], thresholdOn: true, threshold: 70, freq: "close", window: "market", bindOn: false, bindTarget: "Swing candidates" };
+  }
+
+  field(id) {
+    for (const g of this.LIB) { const f = g.fields.find((x) => x.id === id); if (f) return Object.assign({}, f, { cat: g.cat, kind: g.kind }); }
+    return { id, label: id, cat: "", kind: "any", pre: true };
+  }
+  uni(id) { return this.UNIVERSES.find((u) => u.id === id) || this.UNIVERSES[0]; }
+  setup(id) { return this.SETUPS.find((s) => s.id === id) || this.SETUPS[0]; }
+
+  hash(s) { let h = 7; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 99991; return h; }
+  uSize(b) {
+    const u = this.uni(b.universe);
+    if (u.strikes) { const n = b.strike * 2 + 1; return u.multi ? n * u.multi : n; }
+    return u.size;
+  }
+  inr(n) { return "₹" + n.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  evalVal(fid, sym) {
+    const f = this.field(fid);
+    const h = this.hash(fid + sym);
+    if (f.type === "enum") return f.values[h % f.values.length];
+    const base = { rsi_14: [16, 34], day_chg: [-6, -1], vol_rel: [0.8, 3.4], pe_ratio: [9, 34], promoter: [28, 74],
+      atm_iv: [12, 26], pcr: [0.45, 1.3], call_oi_chg: [8, 62], oi_wall: [0.4, 4.2], roce: [11, 31], de: [0.05, 1.4], eps_g: [2, 38] }[fid] || [1, 100];
+    const v = base[0] + ((h % 1000) / 1000) * (base[1] - base[0]);
+    const s = v < 10 ? v.toFixed(2) : v.toFixed(1);
+    return s + (f.unit === "%" ? "%" : f.unit === "×" ? "×" : "");
+  }
+  expr(c) {
+    const f = this.field(c.f);
+    const sym = this.OPSYM[c.op] || c.op;
+    return sym + " " + c.v + (f.unit === "%" ? "%" : f.unit === "×" ? "×" : "");
+  }
+  condLabel(c) { return this.field(c.f).label; }
+  sourceOf(c, universeId) {
+    const f = this.field(c.f);
+    const u = this.uni(universeId);
+    if (u.kind === "deriv") return f.kind === "deriv" ? "contract" : "underlying";
+    return "instrument";
+  }
+  toast(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ toast: null }), 2600);
+  }
+  patchB(patch) { this.setState((s) => ({ b: Object.assign({}, s.b, patch) })); }
+
+  rowsFor(su, status) {
+    const conds = su.conds;
+    return su.results
+      .map((r) => ({ sym: r[0], name: r[1], ltp: r[2], chg: r[3], missed: r[4] }))
+      .filter((r) => {
+        const pct = ((conds.length - r.missed.length) / conds.length) * 100;
+        if (status === "matched") return r.missed.length === 0;
+        return r.missed.length > 0 && pct >= (su.threshold || 101);
+      })
+      .map((r) => {
+        const pct = Math.round(((conds.length - r.missed.length) / conds.length) * 100);
+        const met = conds.filter((c, i) => r.missed.indexOf(i) < 0);
+        const missedC = conds.filter((c, i) => r.missed.indexOf(i) >= 0);
+        return {
+          sym: r.sym, name: r.name, ltp: this.inr(r.ltp),
+          chg: (r.chg > 0 ? "+" : "") + r.chg.toFixed(2) + "%",
+          chgColor: r.chg >= 0 ? "var(--up-300)" : "var(--down-500)",
+          ratio: (conds.length - r.missed.length) + "/" + conds.length,
+          pctWidth: pct + "%", matchPct: pct + "%",
+          missedChips: missedC.map((c) => ({ label: this.condLabel(c) + " " + this.expr(c) })),
+          evalMet: met.map((c) => ({ label: this.condLabel(c) + " " + this.expr(c), val: this.evalVal(c.f, r.sym) })),
+          evalMissed: missedC.map((c) => ({ label: this.condLabel(c) + " " + this.expr(c), val: this.evalVal(c.f, r.sym) })),
+          open: this.state.openRow === status + r.sym,
+          caret: this.state.openRow === status + r.sym ? "▴" : "▾",
+          onToggle: () => this.setState((s) => ({ openRow: s.openRow === status + r.sym ? null : status + r.sym })),
+        };
+      });
+  }
+
+  renderVals() {
+    const st = this.state;
+    const b = st.b || this.blank(true);
+    const flagsOn = st.flags === null ? (this.props.showOpenFlags !== false) : st.flags;
+    const variant = st.variant || this.props.builderLayout || "split";
+    const isWizard = variant === "wizard";
+
+    const go = (screen) => this.setState({ screen, openRow: null });
+    const nameOf = (id) => this.setup(id).name;
+
+    // ── My Setups ───────────────────────────────────────────────
+    const setupCards = this.SETUPS.map((s) => {
+      const matched = s.results.filter((r) => r[4].length === 0).length;
+      const near = s.results.filter((r) => r[4].length > 0 && ((s.conds.length - r[4].length) / s.conds.length) * 100 >= (s.threshold || 101)).length;
+      const u = this.uni(s.universe);
+      const uLabel = u.strikes ? u.label.split("—")[0].trim() + " · " + s.instrument + " · ±" + s.strike + " strikes" : u.label;
+      const size = u.strikes ? (s.strike * 2 + 1) * (u.multi || 1) : u.size;
+      return {
+        name: s.name, status: s.status, universe: uLabel,
+        matched: String(matched), ofTotal: " / " + size,
+        nearMiss: s.threshold ? String(near) : "—",
+        nearMissLabel: s.threshold ? "near-miss ≥ " + s.threshold + "%" : "near-miss off",
+        schedule: { every_15: "Every 15 min", hourly: "Hourly", open: "At open", close: "At close", daily_eod: "Daily EOD" }[s.freq],
+        condCount: s.conds.length + " conditions · AND",
+        hasBinding: !!s.bind, binding: "→ " + (s.bind || ""),
+        diffKnown: true, added: "+" + s.diff.added.length + " added", dropped: "−" + s.diff.dropped.length + " dropped",
+        lastRun: s.lastRun,
+        onOpen: () => this.setState({ screen: "detail", setupId: s.id, tab: "matches", openRow: null }),
+        onEdit: () => {
+          const nb = this.blank(false);
+          this.setState({ screen: "builder", step: 0, b: Object.assign(nb, {
+            name: s.name, universe: s.universe, instrument: s.instrument || "NIFTY", expiry: s.expiry || "near_week",
+            strike: s.strike || 5, conds: s.conds.map((c) => ({ f: c.f, op: c.op, v: c.v, v2: "" })),
+            thresholdOn: !!s.threshold, threshold: s.threshold || 70, freq: s.freq, window: s.window,
+            bindOn: !!s.bind, bindTarget: s.bind || this.WATCHLISTS[0],
+          }) });
+        },
+        onRun: () => this.toast("Run queued — “" + s.name + "”. You’ll get an in-app notification when it completes."),
+      };
+    });
+
+    // ── Detail ──────────────────────────────────────────────────
+    const su = this.setup(st.setupId);
+    const uD = this.uni(su.universe);
+    const sizeD = uD.strikes ? (su.strike * 2 + 1) * (uD.multi || 1) : uD.size;
+    const matchRows = this.rowsFor(su, "matched");
+    const nearRows = this.rowsFor(su, "near");
+    const preOpenBad = su.conds.filter((c) => !this.field(c.f).pre);
+    const tabDefs = [
+      { id: "matches", label: "Matches · " + matchRows.length },
+      { id: "near", label: "Near-miss · " + nearRows.length },
+      { id: "conds", label: "Conditions · " + su.conds.length },
+      { id: "runs", label: "Run history" },
+    ];
+    const runStatuses = [
+      { status: "Completed", bg: "rgba(81,176,50,.16)", color: "var(--up-300)" },
+      { status: "Blocked · pre-open", bg: "rgba(177,102,16,.16)", color: "#F2C78A" },
+      { status: "Failed", bg: "rgba(241,66,66,.14)", color: "var(--down-500)" },
+    ];
+    const runs = ["Today 15:35", "Today 09:05", "Fri 15:35", "Fri 09:05", "Thu 15:35", "Wed 15:35"].map((w, i) => {
+      const s = i === 1 ? runStatuses[1] : i === 4 ? runStatuses[2] : runStatuses[0];
+      const ok = s.status === "Completed";
+      return { when: w, status: s.status, bg: s.bg, color: s.color, universe: String(sizeD),
+        matched: ok ? String(Math.max(1, matchRows.length - i)) : "—", near: ok ? String(Math.max(0, nearRows.length - i)) : "—" };
+    });
+
+    const d = {
+      name: su.name, status: su.status,
+      metaLine: (uD.strikes ? uD.label + " · " + su.instrument + " · near week · ±" + su.strike + " strikes" : uD.label)
+        + " · " + su.conds.length + " conditions (AND)" + (su.threshold ? " · near-miss ≥ " + su.threshold + "%" : "")
+        + (su.bind ? " · bound to “" + su.bind + "”" : " · no watchlist binding"),
+      preOpenBlocked: su.window === "pre_open" && preOpenBad.length > 0,
+      preOpenReason: preOpenBad.length + " condition" + (preOpenBad.length > 1 ? "s are" : " is") + " not valid pre-open: "
+        + preOpenBad.map((c) => this.condLabel(c)).join(", ") + ".",
+      stats: [
+        { label: "Universe", value: String(sizeD), sub: "as of latest run" },
+        { label: "Matched", value: String(matchRows.length), sub: "all conditions true" },
+        { label: "Near-miss", value: su.threshold ? String(nearRows.length) : "off", sub: su.threshold ? "≥ " + su.threshold + "% of conditions" : "threshold not set" },
+        { label: "Last run", value: su.lastRun.split(" ")[1] || su.lastRun, sub: su.lastRun.split(" ")[0] + " · completed" },
+        { label: "Watchlist", value: su.bind ? "Synced" : "None", sub: su.bind ? "“" + su.bind + "” overwritten" : "output not bound" },
+      ],
+      tabs: tabDefs.map((t) => ({ label: t.label, color: st.tab === t.id ? "var(--dark-fg-1)" : "var(--dark-fg-3)",
+        underline: st.tab === t.id ? "var(--nubra-blue-400)" : "transparent", onClick: () => this.setState({ tab: t.id, openRow: null }) })),
+      showMatches: st.tab === "matches", showNear: st.tab === "near", showConds: st.tab === "conds", showRuns: st.tab === "runs",
+      matchRows, nearRows,
+      matchFoot: "Results are persisted at instrument × condition granularity — that is what makes this row-level breakdown possible (§5.4).",
+      nearHeadline: nearRows.length + " instruments cleared ≥ " + su.threshold + "% of conditions without fully matching",
+      added: su.diff.added.map((s) => ({ sym: s })), dropped: su.diff.dropped.map((s) => ({ sym: s })),
+      addedCount: String(su.diff.added.length), droppedCount: String(su.diff.dropped.length),
+      condHeadline: su.conds.length + " conditions, all combined with AND. Flat list — no groups, no OR (§5.2).",
+      condList: su.conds.map((c, i) => {
+        const f = this.field(c.f);
+        return { idx: String(i + 1).padStart(2, "0"), label: f.label, expr: this.expr(c),
+          source: this.sourceOf(c, su.universe),
+          pre: f.pre ? "pre-open ok" : "not pre-open valid",
+          preBg: f.pre ? "rgba(81,176,50,.14)" : "rgba(241,66,66,.12)",
+          preColor: f.pre ? "var(--up-300)" : "var(--down-500)" };
+      }),
+      runs,
+    };
+
+    // ── Builder ─────────────────────────────────────────────────
+    const uB = this.uni(b.universe);
+    const sizeB = this.uSize(b);
+    const badPre = b.conds.filter((c) => !this.field(c.f).pre);
+    const est = b.conds.length ? Math.max(1, Math.round(sizeB * Math.pow(0.48, b.conds.length))) : sizeB;
+    const estNear = b.thresholdOn && b.conds.length ? Math.max(0, Math.round(est * 0.8)) : 0;
+    const stepDefs = ["Name & universe", "Conditions", "Near-miss", "Schedule", "Output"];
+    const visible = (i) => !isWizard || st.step === i;
+
+    const builder = {
+      heading: b.name ? b.name : "New setup",
+      isWizard, splitBg: isWizard ? "transparent" : "var(--nubra-blue-400)", splitFg: isWizard ? "var(--dark-fg-2)" : "var(--fg-on-primary)",
+      wizardBg: isWizard ? "var(--nubra-blue-400)" : "transparent", wizardFg: isWizard ? "var(--fg-on-primary)" : "var(--dark-fg-2)",
+      pickSplit: () => this.setState({ variant: "split" }),
+      pickWizard: () => this.setState({ variant: "wizard", step: 0 }),
+      steps: stepDefs.map((label, i) => ({
+        n: String(i + 1), label,
+        bg: st.step === i ? "rgba(0,120,206,.16)" : "transparent",
+        fg: st.step === i ? "var(--dark-fg-1)" : "var(--dark-fg-3)",
+        dotBg: st.step === i ? "var(--nubra-blue-400)" : "rgba(245,245,255,.1)",
+        dotFg: st.step === i ? "var(--fg-on-primary)" : "var(--dark-fg-3)",
+        onClick: () => this.setState({ step: i }),
+      })),
+      showUniverse: visible(0), showConditions: visible(1), showNearMiss: visible(2), showSchedule: visible(3), showOutput: visible(4),
+      stepHint: "Step " + (st.step + 1) + " of 5 · " + stepDefs[st.step],
+      nextLabel: st.step === 4 ? "Review & save" : "Continue",
+      next: () => this.setState((s) => ({ step: Math.min(4, s.step + 1) })),
+      back: () => this.setState((s) => ({ step: Math.max(0, s.step - 1) })),
+
+      name: b.name, onName: (e) => this.patchB({ name: e.target.value }),
+      universe: b.universe, onUniverse: (e) => this.patchB({ universe: e.target.value }),
+      universeOptions: this.UNIVERSES.map((u) => ({ id: u.id, label: u.label, selected: u.id === b.universe })),
+      needsInstrument: uB.param === "instrument", instrument: b.instrument,
+      onInstrument: (e) => this.patchB({ instrument: e.target.value }),
+      instrumentOptions: this.INSTRUMENTS.map((i) => ({ id: i, label: i, selected: i === b.instrument })),
+      needsWatchlist: uB.param === "watchlist", watchlist: b.watchlist,
+      onWatchlist: (e) => this.patchB({ watchlist: e.target.value }),
+      watchlistOptions: this.WATCHLISTS.map((w) => ({ id: w, label: w, selected: w === b.watchlist })),
+      isDeriv: !!uB.strikes, expiry: b.expiry, onExpiry: (e) => this.patchB({ expiry: e.target.value }),
+      strike: String(b.strike), onStrike: (e) => this.patchB({ strike: Number(e.target.value) }),
+      strikeLabel: "ATM ± " + b.strike + " strikes",
+      strikeCount: (b.strike * 2 + 1) + " strikes per expiry" + (uB.multi ? " × " + uB.multi + " expiries" : ""),
+      universeSizeLabel: sizeB.toLocaleString("en-IN") + " instruments",
+      universeNote: uB.note,
+      universeFlag: flagsOn && !!uB.flag, universeFlagLabel: uB.flag || "",
+
+      noConditions: b.conds.length === 0,
+      openLib: () => this.setState({ lib: true }),
+      condRows: b.conds.map((c, i) => {
+        const f = this.field(c.f);
+        const isEnum = f.type === "enum";
+        const hits = 20 + (this.hash(c.f + c.op + c.v) % Math.max(30, Math.round(sizeB * 0.6)));
+        return {
+          showAnd: i > 0, label: f.label, cat: f.cat,
+          ops: (isEnum ? this.OPS_ENUM : this.OPS_NUM).map((o) => ({ id: o.id, label: o.label, selected: o.id === c.op })),
+          op: c.op, onOp: (e) => { const v = e.target.value; this.setState((s) => { const cs = s.b.conds.slice(); cs[i] = Object.assign({}, cs[i], { op: v }); return { b: Object.assign({}, s.b, { conds: cs }) }; }); },
+          isNum: !isEnum && c.op !== "between", isRange: !isEnum && c.op === "between", isEnum,
+          enumOptions: isEnum ? f.values.map((v) => ({ id: v, label: v, selected: v === c.v })) : [],
+          value: c.v, value2: c.v2 || "",
+          onVal: (e) => { const v = e.target.value; this.setState((s) => { const cs = s.b.conds.slice(); cs[i] = Object.assign({}, cs[i], { v }); return { b: Object.assign({}, s.b, { conds: cs }) }; }); },
+          onVal2: (e) => { const v = e.target.value; this.setState((s) => { const cs = s.b.conds.slice(); cs[i] = Object.assign({}, cs[i], { v2: v }); return { b: Object.assign({}, s.b, { conds: cs }) }; }); },
+          unit: f.unit || "",
+          sourceLabel: "source · " + this.sourceOf(c, b.universe),
+          preLabel: f.pre ? "pre-open ok" : "not pre-open valid",
+          preBg: f.pre ? "rgba(81,176,50,.14)" : "rgba(241,66,66,.12)",
+          preColor: f.pre ? "var(--up-300)" : "var(--down-500)",
+          hits: "≈ " + Math.min(hits, sizeB).toLocaleString("en-IN") + " pass this alone",
+          onRemove: () => this.setState((s) => ({ b: Object.assign({}, s.b, { conds: s.b.conds.filter((x, j) => j !== i) }) })),
+        };
+      }),
+
+      thresholdOn: b.thresholdOn, threshold: String(b.threshold),
+      thBg: b.thresholdOn ? "rgba(177,102,16,.55)" : "rgba(245,245,255,.1)",
+      thKnobLeft: b.thresholdOn ? "26px" : "2px",
+      onToggleThreshold: () => this.patchB({ thresholdOn: !b.thresholdOn }),
+      onThreshold: (e) => this.patchB({ threshold: Number(e.target.value) }),
+      thresholdLabel: b.threshold + "%",
+      thresholdHint: b.conds.length
+        ? "≥ " + Math.ceil((b.threshold / 100) * b.conds.length) + " of " + b.conds.length + " conditions must be true"
+        : "add conditions to see the cut-off",
+
+      freq: b.freq, onFreq: (e) => this.patchB({ freq: e.target.value }),
+      window: b.window, onWindow: (e) => this.patchB({ window: e.target.value }),
+      preOpenClash: b.window === "pre_open" && badPre.length > 0,
+      preOpenClashDetail: badPre.length + " condition" + (badPre.length > 1 ? "s are" : " is") + " ineligible pre-open ("
+        + badPre.map((c) => this.condLabel(c)).join(", ") + "). The entire run is blocked — never partially evaluated (§5.3).",
+
+      bindOn: b.bindOn, bindBg: b.bindOn ? "rgba(0,120,206,.7)" : "rgba(245,245,255,.1)",
+      bindKnobLeft: b.bindOn ? "26px" : "2px",
+      onToggleBind: () => this.patchB({ bindOn: !b.bindOn }),
+      bindTarget: b.bindTarget, onBindTarget: (e) => this.patchB({ bindTarget: e.target.value }),
+      bindOptions: this.WATCHLISTS.map((w) => ({ id: w, label: w, selected: w === b.bindTarget })),
+      selfNarrow: b.bindOn && uB.param === "watchlist" && b.watchlist === b.bindTarget,
+
+      preview: [
+        { label: "Universe at run start", value: sizeB.toLocaleString("en-IN"), color: "var(--dark-fg-1)" },
+        { label: "Conditions (AND)", value: String(b.conds.length), color: "var(--dark-fg-1)" },
+        { label: "Estimated full matches", value: String(est), color: "var(--up-300)" },
+        { label: "Estimated near-miss", value: b.thresholdOn ? String(estNear) : "off", color: "#F2C78A" },
+      ],
+      costNote: uB.strikes
+        ? "Option-chain universes are the most expensive per run; the strike band is the main cost lever. Every instrument is evaluated against every condition for match %, so there is no short-circuit saving (§11)."
+        : "Indicator calls batch ~200 symbols; this universe chunks into " + Math.ceil(sizeB / 200) + " call" + (Math.ceil(sizeB / 200) > 1 ? "s" : "") + " per indicator condition (§11).",
+      checks: [
+        b.name ? { icon: "✓", color: "var(--up-300)", text: "Setup is named" } : { icon: "✕", color: "var(--down-500)", text: "Give the setup a name" },
+        b.conds.length ? { icon: "✓", color: "var(--up-300)", text: b.conds.length + " conditions, all valid for this universe" } : { icon: "✕", color: "var(--down-500)", text: "Add at least one condition" },
+        badPre.length
+          ? { icon: "!", color: "#F2C78A", text: badPre.length + " condition" + (badPre.length > 1 ? "s" : "") + " can’t run pre-open — pre-open runs will be blocked" }
+          : { icon: "✓", color: "var(--up-300)", text: "All conditions are pre-open valid" },
+        b.bindOn
+          ? { icon: "✓", color: "var(--up-300)", text: "Full matches overwrite “" + b.bindTarget + "” at run end" }
+          : { icon: "·", color: "var(--dark-fg-3)", text: "No watchlist bound — matches live on My Setups only" },
+      ],
+      openQuestions: [
+        { ref: "§12.1", text: "Run frequency options and tier limits — deferred on costing." },
+        { ref: "§12.3", text: "Default ATM strike-band width; whether “all strikes” ships as opt-in." },
+        { ref: "§12.9", text: "On-demand “run now” alongside the schedule — flagged as a likely need." },
+        { ref: "§12.10", text: "Near-miss threshold: mandatory or optional, and what default." },
+        { ref: "§12.6", text: "Mid-run upstream failure — proposed fail-closed, no partial results." },
+      ],
+      save: () => { this.toast("Setup saved. First run is scheduled — you’ll be notified when it completes."); this.setState({ screen: "setups", empty: false }); },
+      saveDraft: () => this.toast("Saved as draft. Draft setups don’t run until activated."),
+    };
+
+    // ── Library modal ───────────────────────────────────────────
+    const q = st.libQuery.trim().toLowerCase();
+    const univKind = uB.kind;
+    const compatible = (g) => g.kind === "any" || univKind === "deriv" || g.kind === "equity";
+    const allFields = [];
+    this.LIB.forEach((g) => g.fields.forEach((f) => allFields.push(Object.assign({}, f, { cat: g.cat, kind: g.kind }))));
+    const pool = q ? allFields.filter((f) => (f.label + " " + f.id + " " + f.cat).toLowerCase().indexOf(q) >= 0)
+                   : allFields.filter((f) => f.cat === st.libCat);
+    const libFields = pool.map((f) => {
+      const grp = this.LIB.find((g) => g.cat === f.cat);
+      const ok = compatible(grp);
+      const used = b.conds.some((c) => c.f === f.id);
+      const src = univKind === "deriv" ? (f.kind === "deriv" ? "contract" : "underlying") : "instrument";
+      return {
+        label: f.label,
+        note: ok ? (f.note ? f.note + " · " + f.cat : f.cat) : "Not available for " + uB.label.toLowerCase(),
+        tag: used ? "added" : ok ? src : "n/a",
+        tagBg: used ? "rgba(81,176,50,.16)" : ok ? "rgba(0,120,206,.16)" : "rgba(241,66,66,.12)",
+        tagFg: used ? "var(--up-300)" : ok ? "rgb(120,201,255)" : "var(--down-500)",
+        bg: used ? "rgba(81,176,50,.07)" : "rgba(0,0,0,.25)",
+        opacity: ok ? "1" : "0.45", cursor: ok ? "pointer" : "not-allowed",
+        onAdd: ok
+          ? () => this.setState((s) => {
+              const def = f.type === "enum" ? { f: f.id, op: "is", v: f.values[0], v2: "" } : { f: f.id, op: "gt", v: "0", v2: "" };
+              const already = s.b.conds.some((c) => c.f === f.id);
+              return { b: Object.assign({}, s.b, { conds: already ? s.b.conds : s.b.conds.concat([def]) }) };
+            })
+          : () => this.toast("“" + f.label + "” doesn’t intersect this universe type — rejected at build time (§10)."),
+      };
+    });
+
+    const lib = {
+      open: st.lib, close: () => this.setState({ lib: false, libQuery: "" }),
+      subtitle: "Fields are filtered to what intersects " + uB.label.toLowerCase()
+        + (univKind === "deriv" ? " — equity fields resolve against the underlying (§5.2)." : "."),
+      query: st.libQuery, onQuery: (e) => this.setState({ libQuery: e.target.value }),
+      cats: this.LIB.map((g) => ({
+        name: g.cat, count: String(g.fields.length),
+        bg: !q && st.libCat === g.cat ? "rgba(0,120,206,.18)" : "transparent",
+        fg: !q && st.libCat === g.cat ? "var(--dark-fg-1)" : "var(--dark-fg-2)",
+        onClick: () => this.setState({ libCat: g.cat, libQuery: "" }),
+      })),
+      fields: libFields, noResults: libFields.length === 0,
+      footer: b.conds.length + " condition" + (b.conds.length === 1 ? "" : "s") + " in this setup · all combined with AND",
+    };
+
+    // ── Overlap ─────────────────────────────────────────────────
+    const A = this.setup(st.ovA), B = this.setup(st.ovB);
+    const mA = A.results.filter((r) => r[4].length === 0).map((r) => r[0]);
+    const mB = B.results.filter((r) => r[4].length === 0).map((r) => r[0]);
+    const both = mA.filter((s) => mB.indexOf(s) >= 0);
+    const rowsO = both.map((sym) => {
+      const r = A.results.find((x) => x[0] === sym);
+      return { sym, name: r[1], ltp: this.inr(r[2]),
+        chg: (r[3] > 0 ? "+" : "") + r[3].toFixed(2) + "%",
+        chgColor: r[3] >= 0 ? "var(--up-300)" : "var(--down-500)",
+        aCount: A.conds.length + "/" + A.conds.length, bCount: B.conds.length + "/" + B.conds.length };
+    });
+    const o = {
+      a: st.ovA, b: st.ovB,
+      optionsA: this.SETUPS.map((s) => ({ id: s.id, label: s.name, selected: s.id === st.ovA })),
+      optionsB: this.SETUPS.map((s) => ({ id: s.id, label: s.name, selected: s.id === st.ovB })),
+      onA: (e) => this.setState({ ovA: e.target.value }), onB: (e) => this.setState({ ovB: e.target.value }),
+      run: () => this.toast("Overlap computed on demand from each setup’s latest run — nothing is persisted."),
+      onlyA: String(mA.length - both.length), onlyB: String(mB.length - both.length), both: String(both.length),
+      aName: A.name + " · " + mA.length + " matches", bName: B.name + " · " + mB.length + " matches",
+      rows: rowsO, hasResults: both.length > 0, zero: both.length === 0,
+      zeroText: A.name + " and " + B.name + " share no instruments in their latest full-match lists.",
+    };
+
+    return {
+      crumb: st.screen === "setups" ? "My Setups" : st.screen === "detail" ? su.name : st.screen === "builder" ? (b.name || "New setup") : "Overlap analysis",
+      isSetups: st.screen === "setups", isDetail: st.screen === "detail", isBuilder: st.screen === "builder", isOverlap: st.screen === "overlap",
+      goSetups: () => go("setups"), goOverlap: () => go("overlap"),
+      flagsOn, toggleFlags: () => this.setState({ flags: !flagsOn }),
+      isEmpty: st.empty, notEmpty: !st.empty,
+      toggleEmpty: () => this.setState({ empty: !st.empty }),
+      emptyToggleLabel: st.empty ? "Show populated state" : "Show first-run state",
+      setupsSubtitle: this.SETUPS.length + " setups · " + this.SETUPS.filter((s) => s.status === "Active").length + " active · last run today 15:35 IST",
+      starters: this.STARTERS.map((s) => ({ name: s.name, desc: s.desc, onPick: () => this.setState({ screen: "builder", empty: false, step: 0, b: this.blank(true) }) })),
+      setupCards,
+      newSetup: () => this.setState({ screen: "builder", step: 0, b: this.blank(false) }),
+      editCurrent: () => {
+        const s = su;
+        this.setState({ screen: "builder", step: 0, b: Object.assign(this.blank(false), {
+          name: s.name, universe: s.universe, instrument: s.instrument || "NIFTY", expiry: s.expiry || "near_week",
+          strike: s.strike || 5, conds: s.conds.map((c) => ({ f: c.f, op: c.op, v: c.v, v2: "" })),
+          thresholdOn: !!s.threshold, threshold: s.threshold || 70, freq: s.freq, window: s.window,
+          bindOn: !!s.bind, bindTarget: s.bind || this.WATCHLISTS[0],
+        }) });
+      },
+      d, b: builder, lib, o,
+      hasToast: !!st.toast, toast: st.toast || "",
+    };
+  }
+}
+
+</script>
+</body>
+</html>
