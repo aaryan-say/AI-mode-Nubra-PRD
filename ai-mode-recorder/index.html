@@ -687,7 +687,9 @@ function generateOC(seedStr, symbolBase) {
 const app = {
   state: { watch: null, symbol: 'NIFTY', timeframe: '5m', expiry: 'nearest', events: [], startTime: null, timerId: null, drawTool: null },
   charts: {},
+  boxAnchors: {},
   pendingBoxEl: null,
+  pendingAnchor: null,
   activeDrag: null,
 
   go(screen) {
@@ -801,6 +803,7 @@ const app = {
   /* ----- workspace layout ----- */
   buildWorkspace() {
     this.disposeCharts();
+    this.boxAnchors = { main: [], pe: [], ce: [] };
     const wrap = document.getElementById('rec-workspace');
     if (this.state.watch === 'oc') wrap.innerHTML = this.ocPaneHTML(true);
     else if (this.state.watch === 'chart') wrap.innerHTML = this.chartPaneHTML(true);
@@ -882,17 +885,54 @@ const app = {
       });
       const ro = new ResizeObserver(entries => {
         const r = entries[0].contentRect;
-        if (r.width > 0 && r.height > 0) chart.resize(r.width, r.height);
+        if (r.width > 0 && r.height > 0) { chart.resize(r.width, r.height); app.repositionBoxesFor(key); }
       });
       ro.observe(holder);
       this.charts[key] = { chart, series, ro };
+      // keep drawn boxes glued to their price/time anchors as the user pans or zooms the chart
+      chart.timeScale().subscribeVisibleLogicalRangeChange(() => app.repositionBoxesFor(key));
       const overlay = document.querySelector('.draw-overlay[data-col="' + key + '"]');
       if (overlay) overlay.addEventListener('mousedown', e => app.startBox(e, overlay));
+    });
+  },
+  /* convert a box's on-screen pixel rect into chart data-space (logical x-range, price y-range)
+     so it can be redrawn at the correct pixels no matter how the chart is panned/zoomed */
+  computeAnchor(key, boxEl) {
+    const chartObj = this.charts[key];
+    if (!chartObj) return null;
+    const ts = chartObj.chart.timeScale();
+    const left = parseFloat(boxEl.style.left), top = parseFloat(boxEl.style.top);
+    const width = parseFloat(boxEl.style.width), height = parseFloat(boxEl.style.height);
+    return {
+      logicalLeft: ts.coordinateToLogical(left),
+      logicalRight: ts.coordinateToLogical(left + width),
+      priceTop: chartObj.series.coordinateToPrice(top),
+      priceBottom: chartObj.series.coordinateToPrice(top + height)
+    };
+  },
+  repositionBoxesFor(key) {
+    const chartObj = this.charts[key];
+    const anchors = this.boxAnchors[key];
+    if (!chartObj || !anchors || !anchors.length) return;
+    const ts = chartObj.chart.timeScale();
+    anchors.forEach(a => {
+      const xLeft = ts.logicalToCoordinate(a.logicalLeft);
+      const xRight = ts.logicalToCoordinate(a.logicalRight);
+      const yTop = chartObj.series.priceToCoordinate(a.priceTop);
+      const yBottom = chartObj.series.priceToCoordinate(a.priceBottom);
+      if (xLeft === null || xRight === null || yTop === null || yBottom === null) return;
+      const left = Math.min(xLeft, xRight), width = Math.abs(xRight - xLeft);
+      const top = Math.min(yTop, yBottom), height = Math.abs(yBottom - yTop);
+      a.el.style.left = left + 'px'; a.el.style.top = top + 'px';
+      a.el.style.width = width + 'px'; a.el.style.height = height + 'px';
+      if (a.tagEl) { a.tagEl.style.left = left + 'px'; a.tagEl.style.top = (top + height + 4) + 'px'; }
     });
   },
   disposeCharts() {
     Object.values(this.charts).forEach(c => { try { c.ro.disconnect(); } catch (e) {} try { c.chart.remove(); } catch (e) {} });
     this.charts = {};
+    this.boxAnchors = {};
+    this.pendingAnchor = null;
     if (this.activeDrag) { window.removeEventListener('mousemove', this.activeDrag.onMove); window.removeEventListener('mouseup', this.activeDrag.onUp); this.activeDrag = null; }
     this.pendingBoxEl = null;
   },
@@ -969,6 +1009,13 @@ const app = {
       if (w < 8 || h < 8) { preview.remove(); return; }
       preview.classList.remove('box-preview');
       preview.classList.add('box-mark');
+      // anchor it to chart data-space (logical x-range + price y-range) so it stays glued
+      // to the candles it was drawn over when the user pans or zooms the chart
+      const key = overlay.dataset.col;
+      const anchor = Object.assign({ el: preview, tagEl: null }, app.computeAnchor(key, preview) || {});
+      app.boxAnchors[key] = app.boxAnchors[key] || [];
+      app.boxAnchors[key].push(anchor);
+      app.pendingAnchor = anchor;
       // lock drawing immediately: no second box can start until this one is Done/Skip'd
       app.lockOverlaysForEdit();
       app.openBoxNote(preview, overlay);
@@ -998,7 +1045,14 @@ const app = {
     this.repositionBoxPopup(boxEl, overlay);
     const ta = popup.querySelector('textarea');
     ta.focus();
-    const discard = () => { boxEl.remove(); popup.remove(); this.pendingBoxEl = null; this.disarmDraw(); };
+    const discard = () => {
+      boxEl.remove(); popup.remove(); this.pendingBoxEl = null;
+      const key = overlay.dataset.col;
+      const anchors = this.boxAnchors[key];
+      if (anchors) { const idx = anchors.indexOf(this.pendingAnchor); if (idx !== -1) anchors.splice(idx, 1); }
+      this.pendingAnchor = null;
+      this.disarmDraw();
+    };
     popup.querySelector('.done').onclick = () => this.confirmBox(boxEl, col, ta.value.trim(), popup);
     popup.querySelector('.skip').onclick = discard;
     popup.querySelector('.popup-close').onclick = discard;
@@ -1047,6 +1101,7 @@ const app = {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
       app.repositionBoxPopup(boxEl, overlay);
+      if (app.pendingAnchor) Object.assign(app.pendingAnchor, app.computeAnchor(overlay.dataset.col, boxEl));
     };
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
@@ -1065,6 +1120,7 @@ const app = {
       window.removeEventListener('mousemove', onMove);
       window.removeEventListener('mouseup', onUp);
       app.repositionBoxPopup(boxEl, overlay);
+      if (app.pendingAnchor) Object.assign(app.pendingAnchor, app.computeAnchor(overlay.dataset.col, boxEl));
     };
     window.addEventListener('mousemove', onMove);
     window.addEventListener('mouseup', onUp);
@@ -1082,10 +1138,12 @@ const app = {
       tag.style.top = (parseFloat(boxEl.style.top) + parseFloat(boxEl.style.height) + 4) + 'px';
       tag.textContent = note.length > 60 ? note.slice(0, 57) + '…' : note;
       col.appendChild(tag);
+      if (this.pendingAnchor) this.pendingAnchor.tagEl = tag;
       this.logEvent('Drew a box on the ' + label + ' — "' + note + '"');
     } else {
       this.logEvent('Drew a box on the ' + label);
     }
+    this.pendingAnchor = null;
     this.disarmDraw();
   },
   capture() { this.logEvent('Captured a screenshot of the ' + this.state.symbol + ' chart'); },
@@ -1176,8 +1234,13 @@ document.addEventListener('keydown', e => {
   }
   if (app.pendingBoxEl) {
     document.querySelectorAll('.box-note-popup').forEach(p => p.remove());
+    const col = app.pendingBoxEl.closest('.chart-col');
+    const key = col ? col.dataset.col : null;
+    const anchors = key ? app.boxAnchors[key] : null;
+    if (anchors) { const idx = anchors.indexOf(app.pendingAnchor); if (idx !== -1) anchors.splice(idx, 1); }
     app.pendingBoxEl.remove();
     app.pendingBoxEl = null;
+    app.pendingAnchor = null;
     app.disarmDraw();
   }
 });
