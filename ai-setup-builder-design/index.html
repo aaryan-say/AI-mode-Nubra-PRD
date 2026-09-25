@@ -155,10 +155,10 @@
                   <div style="display:flex;gap:8px">
                     <button onClick="{{ c.onOpen }}" style="flex:1;height:36px;border-radius:999px;border:1px solid rgba(120,201,255,.3);background:rgba(0,120,206,.14);color:rgb(120,201,255);font:var(--t-body-m);cursor:pointer">Open</button>
                     <button onClick="{{ c.onEdit }}" style="height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--dark-border);background:transparent;color:var(--dark-fg-2);font:var(--t-body-m);cursor:pointer">Edit</button>
-                    <button onClick="{{ c.onRun }}" title="Run now" style="height:36px;padding:0 12px;border-radius:999px;border:1px dashed rgba(177,102,16,.55);background:transparent;color:#E8B268;font:var(--t-body-m);cursor:pointer">Run now</button>
+                    <button onClick="{{ c.onRun }}" title="Run now — on-demand, doesn't affect the schedule" style="height:36px;padding:0 12px;border-radius:999px;border:1px solid var(--dark-border);background:transparent;color:var(--dark-fg-2);font:var(--t-body-m);cursor:pointer">Run now</button>
                   </div>
                   <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
-                    <div style="font:var(--t-label-m);color:#E8B268;opacity:.85">Open §12.9 — on-demand “run now” is not in the spec yet</div>
+                    <div style="font:var(--t-label-m);color:var(--up-300);opacity:.85">Resolved §12.9 — on-demand “run now” approved for v1, same semantics as a scheduled run</div>
                   </sc-if>
                 </div>
               </sc-for>
@@ -292,7 +292,7 @@
                 <span style="font:var(--t-body-m);color:#F2C78A">{{ d.nearHeadline }}</span>
                 <span style="flex:1"></span>
                 <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
-                  <span style="font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:4px 8px;border-radius:999px">Open §12.10 — mandatory or optional? default %?</span>
+                  <span style="font:var(--t-label-m);color:var(--up-300);border:1px dashed rgba(30,125,79,.5);padding:4px 8px;border-radius:999px">Resolved §12.10 — optional, default 70%</span>
                 </sc-if>
               </div>
               <div style="display:grid;grid-template-columns:minmax(150px,1.3fr) 100px 90px minmax(200px,2fr) 36px;gap:12px;padding:10px 16px;background:rgba(8,8,8,.45);font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3)">
@@ -372,7 +372,7 @@
                 </div>
               </sc-for>
               <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
-                <div style="padding:12px 16px;border-top:1px solid var(--dark-border);font:var(--t-label-m);color:#E8B268">Deferred §12.4 — run-history retention window is pending the storage costing pass. Diff needs ≥2 runs.</div>
+                <div style="padding:12px 16px;border-top:1px solid var(--dark-border);font:var(--t-label-m);color:rgb(120,201,255)">Deferred §12.4 — final retention window pending the storage costing pass; ≥2 runs are always retained as a confirmed floor regardless.</div>
               </sc-if>
             </div>
           </sc-if>
@@ -461,6 +461,9 @@
                     <div style="margin-top:14px;padding:14px;border-radius:10px;border:1px solid var(--dark-border);background:rgba(0,0,0,.25)">
                       <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
                         <span style="font:var(--t-body-m);color:var(--dark-fg-1)">Strike band around ATM</span>
+                        <sc-if value="{{ b.strikeIsDefault }}" hint-placeholder-val="{{ true }}">
+                          <span title="Default range is ATM ± 5 strikes. Drag to 20 for the full chain (“All strikes”) — option-chain universes are the most expensive to run, so this isn't the default." style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1px solid var(--dark-fg-3);color:var(--dark-fg-3);font:var(--t-label-s);cursor:help;flex:none">i</span>
+                        </sc-if>
                         <span style="font:var(--t-mono-l);color:rgb(120,201,255)">{{ b.strikeLabel }}</span>
                         <span style="flex:1"></span>
                         <span style="font:var(--t-body-s);color:var(--dark-fg-2)">{{ b.strikeCount }}</span>
@@ -469,7 +472,7 @@
                       <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:8px">
                         <span style="font:var(--t-body-s);color:var(--dark-fg-3)">Expiry re-resolves to whichever contract occupies the bucket at run start — never pinned to a date.</span>
                         <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
-                          <span style="font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:4px 8px;border-radius:999px">Open §12.3 — default band width; “all strikes” opt-in</span>
+                          <span style="font:var(--t-label-m);color:var(--up-300);border:1px dashed rgba(30,125,79,.5);padding:4px 8px;border-radius:999px">Resolved §12.3 — default ATM ± 5 strikes, “all strikes” is opt-in</span>
                         </sc-if>
                       </div>
                     </div>
@@ -479,7 +482,7 @@
                     <span style="font:var(--t-label-m);padding:5px 10px;border-radius:999px;background:rgba(0,120,206,.14);color:rgb(120,201,255)">{{ b.universeSizeLabel }}</span>
                     <span style="font:var(--t-body-s);color:var(--dark-fg-2)">{{ b.universeNote }}</span>
                     <sc-if value="{{ b.universeFlag }}" hint-placeholder-val="{{ false }}">
-                      <span style="font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:4px 8px;border-radius:999px">{{ b.universeFlagLabel }}</span>
+                      <span style="font:var(--t-label-m);color:var(--up-300);border:1px dashed rgba(30,125,79,.5);padding:4px 8px;border-radius:999px">{{ b.universeFlagLabel }}</span>
                     </sc-if>
                   </div>
                 </div>
@@ -579,6 +582,9 @@
                       <div style="display:flex;align-items:baseline;gap:10px">
                         <span style="font-family:var(--font-display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;color:#F2C78A">{{ b.thresholdLabel }}</span>
                         <span style="font:var(--t-body-s);color:var(--dark-fg-2)">{{ b.thresholdHint }}</span>
+                        <sc-if value="{{ b.thresholdIsDefault }}" hint-placeholder-val="{{ true }}">
+                          <span title="Near-miss is optional and off unless you turn it on. Once on, it defaults to 70% — drag the slider to change it." style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;border:1px solid var(--dark-fg-3);color:var(--dark-fg-3);font:var(--t-label-s);cursor:help;flex:none">i</span>
+                        </sc-if>
                       </div>
                       <input type="range" min="40" max="95" step="5" value="{{ b.threshold }}" onChange="{{ b.onThreshold }}" style="width:100%;margin-top:10px;accent-color:rgb(177,102,16)">
                       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
@@ -587,7 +593,7 @@
                     </div>
                   </sc-if>
                   <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
-                    <div style="margin-top:12px;font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:8px 10px;border-radius:8px">Open §12.10 — is the threshold mandatory per setup or an optional toggle, and what default ships? Shown here as optional, default 70%.</div>
+                    <div style="margin-top:12px;font:var(--t-label-m);color:var(--up-300);border:1px dashed rgba(30,125,79,.5);padding:8px 10px;border-radius:8px">Resolved §12.10 — optional toggle (default off), 70% default once enabled.</div>
                   </sc-if>
                 </div>
               </sc-if>
@@ -628,7 +634,7 @@
                   <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
                     <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px">
                       <span style="font:var(--t-label-m);color:rgb(120,201,255);border:1px dashed rgba(120,201,255,.5);padding:6px 10px;border-radius:8px">Deferred §12.1 — frequency options &amp; tier limits pending costing; this list is a placeholder</span>
-                      <span style="font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:6px 10px;border-radius:8px">Open §12.5 — per-condition pre_open_valid values need live confirmation</span>
+                      <span style="font:var(--t-label-m);color:var(--up-300);border:1px dashed rgba(30,125,79,.5);padding:6px 10px;border-radius:8px">Resolved (action item) §12.5 — unaudited fields default to pre_open_valid: false</span>
                     </div>
                   </sc-if>
                 </div>
@@ -660,7 +666,7 @@
                         <div style="margin-top:12px;padding:13px 14px;border-radius:10px;background:rgba(177,102,16,.12);border:1px solid rgba(177,102,16,.45);font:var(--t-body-s);color:#F2C78A">This watchlist is both the universe and the output. The list will narrow run over run — possibly to empty. That is intended behaviour; there is no auto-reseed (§5.3).</div>
                       </sc-if>
                       <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
-                        <div style="margin-top:12px;font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:8px 10px;border-radius:8px">Open §12.7 — what happens if the bound watchlist is deleted while the setup is active (pause vs. skip the write)?</div>
+                        <div style="margin-top:12px;font:var(--t-label-m);color:var(--up-300);border:1px dashed rgba(30,125,79,.5);padding:8px 10px;border-radius:8px">Resolved §12.7 — the setup pauses (paused_reason: watchlist_deleted); it never keeps running with the write silently skipped.</div>
                       </sc-if>
                     </div>
                   </sc-if>
@@ -709,12 +715,12 @@
               </div>
 
               <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
-                <div style="border:1px dashed rgba(177,102,16,.5);border-radius:14px;background:rgba(177,102,16,.07);padding:16px">
-                  <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:#E8B268;margin-bottom:10px">Unresolved in the PRD</div>
+                <div style="border:1px dashed rgba(70,120,170,.5);border-radius:14px;background:rgba(70,120,170,.08);padding:16px">
+                  <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:rgb(120,201,255);margin-bottom:10px">Deferred on costing — everything else in the PRD is resolved (v1.2)</div>
                   <div style="display:flex;flex-direction:column;gap:8px">
-                    <sc-for list="{{ b.openQuestions }}" as="q" hint-placeholder-count="5">
+                    <sc-for list="{{ b.openQuestions }}" as="q" hint-placeholder-count="2">
                       <div style="display:flex;gap:8px;align-items:flex-start">
-                        <span style="font:var(--t-mono-m);color:#E8B268;flex-shrink:0">{{ q.ref }}</span>
+                        <span style="font:var(--t-mono-m);color:rgb(120,201,255);flex-shrink:0">{{ q.ref }}</span>
                         <span style="flex:1;font:var(--t-body-s);color:var(--dark-fg-2)">{{ q.text }}</span>
                       </div>
                     </sc-for>
@@ -730,7 +736,7 @@
         <div data-screen-label="Overlap analysis" style="padding:20px 28px 48px;animation:nbFade 200ms var(--ease-out)">
           <button onClick="{{ goSetups }}" style="border:0;background:transparent;color:var(--dark-fg-2);font:var(--t-body-m);cursor:pointer;padding:0;margin-bottom:14px">← My Setups</button>
           <div style="font:var(--t-h3);letter-spacing:-.01em">Overlap analysis</div>
-          <div style="font:var(--t-body-m);color:var(--dark-fg-2);margin-top:6px;margin-bottom:20px;max-width:640px;text-wrap:pretty">Compares the latest full-match lists of two of your setups. Computed on demand — not scheduled, not persisted (§5.8).</div>
+          <div style="font:var(--t-body-m);color:var(--dark-fg-2);margin-top:6px;margin-bottom:20px;max-width:640px;text-wrap:pretty">Compares the latest matches — full matches and near-miss both — of two of your setups. Computed on demand — not scheduled, not persisted (§5.8).</div>
 
           <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:20px">
             <label style="flex:1 1 240px;min-width:220px">
@@ -758,20 +764,20 @@
               <div style="font-family:var(--font-display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:8px">{{ o.onlyA }}</div>
               <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:4px">{{ o.aName }}</div>
               <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
-                <div style="margin-top:10px;font:var(--t-label-m);color:#E8B268">Open §12.12 — should exclusives render at all?</div>
+                <div style="margin-top:10px;font:var(--t-label-m);color:var(--up-300)">Resolved §12.12 — yes, exclusives render alongside the intersection.</div>
               </sc-if>
             </div>
             <div style="border:1px solid rgba(120,201,255,.45);border-radius:12px;background:rgba(0,120,206,.14);padding:16px">
               <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:rgb(120,201,255)">In both</div>
               <div style="font-family:var(--font-display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:8px;color:rgb(223,240,255)">{{ o.both }}</div>
-              <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:4px">Intersection of latest full matches</div>
+              <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:4px">Intersection across full matches and near-miss</div>
             </div>
             <div style="border:1px solid var(--dark-border);border-radius:12px;background:rgba(255,255,255,.03);padding:16px">
               <div style="font:var(--t-label-s);text-transform:uppercase;letter-spacing:.07em;color:var(--dark-fg-3)">Only in B</div>
               <div style="font-family:var(--font-display);font-size:28px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:8px">{{ o.onlyB }}</div>
               <div style="font:var(--t-body-s);color:var(--dark-fg-2);margin-top:4px">{{ o.bName }}</div>
               <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
-                <div style="margin-top:10px;font:var(--t-label-m);color:#E8B268">Open §12.13 — two setups only, or N-way?</div>
+                <div style="margin-top:10px;font:var(--t-label-m);color:var(--up-300)">Resolved §12.13 — two setups only for v1; N-way is an explicit v2 candidate.</div>
               </sc-if>
             </div>
           </div>
@@ -795,10 +801,18 @@
                   </div>
                 </div>
               </sc-for>
-              <div style="padding:12px 16px;border-top:1px solid var(--dark-border);display:flex;flex-wrap:wrap;gap:10px;align-items:center">
-                <span style="font:var(--t-body-s);color:var(--dark-fg-3)">Full matches only — near-miss instruments are excluded from this comparison.</span>
-                <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
-                  <span style="font:var(--t-label-m);color:#E8B268;border:1px dashed rgba(177,102,16,.6);padding:4px 8px;border-radius:999px">Open §12.11 — include near-miss?</span>
+              <div style="padding:12px 16px;border-top:1px solid var(--dark-border);display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+                  <span style="font:var(--t-body-s);color:var(--dark-fg-3)">Includes near-miss instruments alongside full matches — each side shows Match or Near-miss and its match %.</span>
+                  <sc-if value="{{ flagsOn }}" hint-placeholder-val="{{ true }}">
+                    <span style="font:var(--t-label-m);color:var(--up-300);border:1px dashed rgba(30,125,79,.5);padding:4px 8px;border-radius:999px">Resolved §12.11 — near-miss included; a setup with it off just contributes an empty near-miss set.</span>
+                  </sc-if>
+                </div>
+                <sc-if value="{{ o.aNoNearMiss }}" hint-placeholder-val="{{ false }}">
+                  <div style="font:var(--t-body-s);color:var(--dark-fg-3)">{{ o.aPlainName }} has near-miss off — only its full matches count toward this comparison.</div>
+                </sc-if>
+                <sc-if value="{{ o.bNoNearMiss }}" hint-placeholder-val="{{ false }}">
+                  <div style="font:var(--t-body-s);color:var(--dark-fg-3)">{{ o.bPlainName }} has near-miss off — only its full matches count toward this comparison.</div>
                 </sc-if>
               </div>
             </div>
@@ -950,15 +964,14 @@ class Component extends DCLogic {
   ];
 
   UNIVERSES = [
-    { id: "exch", label: "Whole exchange universe", kind: "equity", size: 2143, note: "All NSE-listed equities", flag: "Open §12.2 — size cap, T2T & surveillance exclusions" },
     { id: "n50", label: "Nifty 50", kind: "equity", size: 50, note: "Static index membership" },
     { id: "n100", label: "Nifty 100", kind: "equity", size: 100, note: "Static index membership" },
     { id: "n500", label: "Nifty 500", kind: "equity", size: 500, note: "Static index membership" },
     { id: "fno", label: "All F&O-eligible stocks", kind: "equity", size: 187, note: "Equities with a derivatives segment" },
     { id: "fut_one", label: "Futures — single underlying", kind: "deriv", size: 3, param: "instrument", note: "One underlying's futures contracts" },
     { id: "fut_all", label: "Futures — all F&O underlyings", kind: "deriv", size: 187, note: "Near-month future of every F&O underlying" },
-    { id: "oc_one", label: "Option chain — single underlying, single expiry", kind: "deriv", size: 0, param: "instrument", strikes: true, note: "One expiry's chain, ATM-band bounded", flag: "Open §12.3 — default band width; “all strikes” opt-in" },
-    { id: "oc_all", label: "Option chain — single underlying, all expiries", kind: "deriv", size: 0, param: "instrument", strikes: true, multi: 4, note: "Near-ATM band across expiries", flag: "Open §12.3 — default band width; “all strikes” opt-in" },
+    { id: "oc_one", label: "Option chain — single underlying, single expiry", kind: "deriv", size: 0, param: "instrument", strikes: true, note: "One expiry's chain, ATM-band bounded", flag: "Resolved §12.3 — default ATM ± 5 strikes; “all strikes” is opt-in" },
+    { id: "oc_all", label: "Option chain — single underlying, all expiries", kind: "deriv", size: 0, param: "instrument", strikes: true, multi: 4, note: "Near-ATM band across expiries", flag: "Resolved §12.3 — default ATM ± 5 strikes; “all strikes” is opt-in" },
     { id: "idx_deriv", label: "Index derivatives", kind: "deriv", size: 140, param: "instrument", note: "Index futures & options" },
     { id: "wl", label: "A specific watchlist", kind: "equity", size: 24, param: "watchlist", note: "Resolved to the list's contents at run start" },
     { id: "hold", label: "Portfolio / holdings", kind: "equity", size: 17, note: "Your current holdings at run start" },
@@ -1307,8 +1320,9 @@ class Component extends DCLogic {
       watchlistOptions: this.WATCHLISTS.map((w) => ({ id: w, label: w, selected: w === b.watchlist })),
       isDeriv: !!uB.strikes, expiry: b.expiry, onExpiry: (e) => this.patchB({ expiry: e.target.value }),
       strike: String(b.strike), onStrike: (e) => this.patchB({ strike: Number(e.target.value) }),
-      strikeLabel: "ATM ± " + b.strike + " strikes",
+      strikeLabel: b.strike >= 20 ? "All strikes" : "ATM ± " + b.strike + " strikes",
       strikeCount: (b.strike * 2 + 1) + " strikes per expiry" + (uB.multi ? " × " + uB.multi + " expiries" : ""),
+      strikeIsDefault: b.strike === 5,
       universeSizeLabel: sizeB.toLocaleString("en-IN") + " instruments",
       universeNote: uB.note,
       universeFlag: flagsOn && !!uB.flag, universeFlagLabel: uB.flag || "",
@@ -1344,6 +1358,7 @@ class Component extends DCLogic {
       onToggleThreshold: () => this.patchB({ thresholdOn: !b.thresholdOn }),
       onThreshold: (e) => this.patchB({ threshold: Number(e.target.value) }),
       thresholdLabel: b.threshold + "%",
+      thresholdIsDefault: b.threshold === 70,
       thresholdHint: b.conds.length
         ? "≥ " + Math.ceil((b.threshold / 100) * b.conds.length) + " of " + b.conds.length + " conditions must be true"
         : "add conditions to see the cut-off",
@@ -1382,10 +1397,7 @@ class Component extends DCLogic {
       ],
       openQuestions: [
         { ref: "§12.1", text: "Run frequency options and tier limits — deferred on costing." },
-        { ref: "§12.3", text: "Default ATM strike-band width; whether “all strikes” ships as opt-in." },
-        { ref: "§12.9", text: "On-demand “run now” alongside the schedule — flagged as a likely need." },
-        { ref: "§12.10", text: "Near-miss threshold: mandatory or optional, and what default." },
-        { ref: "§12.6", text: "Mid-run upstream failure — proposed fail-closed, no partial results." },
+        { ref: "§12.4", text: "Final run-history retention window — deferred on costing (≥2 runs always retained as a confirmed floor)." },
       ],
       save: () => { this.toast("Setup saved. First run is scheduled — you’ll be notified when it completes."); this.setState({ screen: "setups", empty: false }); },
       saveDraft: () => this.toast("Saved as draft. Draft setups don’t run until activated."),
@@ -1437,17 +1449,24 @@ class Component extends DCLogic {
       footer: b.conds.length + " condition" + (b.conds.length === 1 ? "" : "s") + " in this setup · all combined with AND",
     };
 
-    // ── Overlap ─────────────────────────────────────────────────
+    // ── Overlap (§12.11: includes near-miss, not just full matches) ─────
     const A = this.setup(st.ovA), B = this.setup(st.ovB);
-    const mA = A.results.filter((r) => r[4].length === 0).map((r) => r[0]);
-    const mB = B.results.filter((r) => r[4].length === 0).map((r) => r[0]);
+    const included = (setup, missed) => {
+      if (missed === 0) return { ok: true, label: "Match", pct: 100 };
+      if (!setup.threshold) return { ok: false, label: "", pct: 0 };  // near-miss off -> contributes nothing beyond full matches
+      const pct = Math.round(((setup.conds.length - missed) / setup.conds.length) * 100);
+      return { ok: pct >= setup.threshold, label: "Near-miss", pct };
+    };
+    const setA = {}; A.results.forEach((r) => { const s = included(A, r[4].length); if (s.ok) setA[r[0]] = s; });
+    const setB = {}; B.results.forEach((r) => { const s = included(B, r[4].length); if (s.ok) setB[r[0]] = s; });
+    const mA = Object.keys(setA), mB = Object.keys(setB);
     const both = mA.filter((s) => mB.indexOf(s) >= 0);
     const rowsO = both.map((sym) => {
       const r = A.results.find((x) => x[0] === sym);
       return { sym, name: r[1], ltp: this.inr(r[2]),
         chg: (r[3] > 0 ? "+" : "") + r[3].toFixed(2) + "%",
         chgColor: r[3] >= 0 ? "var(--up-300)" : "var(--down-500)",
-        aCount: A.conds.length + "/" + A.conds.length, bCount: B.conds.length + "/" + B.conds.length };
+        aCount: setA[sym].label + " · " + setA[sym].pct + "%", bCount: setB[sym].label + " · " + setB[sym].pct + "%" };
     });
     const o = {
       a: st.ovA, b: st.ovB,
@@ -1456,9 +1475,12 @@ class Component extends DCLogic {
       onA: (e) => this.setState({ ovA: e.target.value }), onB: (e) => this.setState({ ovB: e.target.value }),
       run: () => this.toast("Overlap computed on demand from each setup’s latest run — nothing is persisted."),
       onlyA: String(mA.length - both.length), onlyB: String(mB.length - both.length), both: String(both.length),
-      aName: A.name + " · " + mA.length + " matches", bName: B.name + " · " + mB.length + " matches",
+      aName: A.name + " · " + mA.length + " matches" + (A.threshold ? " + near-miss" : ""),
+      bName: B.name + " · " + mB.length + " matches" + (B.threshold ? " + near-miss" : ""),
+      aPlainName: A.name, bPlainName: B.name,
+      aNoNearMiss: !A.threshold, bNoNearMiss: !B.threshold,
       rows: rowsO, hasResults: both.length > 0, zero: both.length === 0,
-      zeroText: A.name + " and " + B.name + " share no instruments in their latest full-match lists.",
+      zeroText: A.name + " and " + B.name + " share no instruments across matches and near-miss.",
     };
 
     return {
